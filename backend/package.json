@@ -1,0 +1,14 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "devDependencies": {
+    "@composedb/devtools": "^0.4.4",
+    "@composedb/devtools-node": "^0.4.4"
+  },
+  "dependencies": {
+    "@ceramicnetwork/cli": "^2.31.0",
+    "@composedb/cli": "^0.4.5"
+  }
+}
