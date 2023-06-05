@@ -6,11 +6,9 @@ const App: React.FC = () => {
   return (
     <div>
       <Navbar />
-      <div>
-        {/* Rest of your app goes here... */}
-      </div>
     </div>
   );
 }
 
 export default App;
+
