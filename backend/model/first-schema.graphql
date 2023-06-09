@@ -1,0 +1,30 @@
+type User{
+    name: String!
+    creator: Boolean!
+    playlist:[Int!]
+}
+
+type audio{
+    id: String!
+    creator: String!
+    tip: Int!
+    title: String!
+    photo: String
+    duration: String!
+    likes: Int
+}
+
+type playlist{
+    id: String!
+    owner: String!
+    songs:[audio!]!
+    shared: Boolean!
+    people: [String!]
+}
+
+type likedTracks
+{
+    sender: String!
+    receiver: String!
+    amount: Int
+}
