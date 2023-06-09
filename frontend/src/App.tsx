@@ -1,35 +1,45 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+// App.tsx
+import React, { useState } from 'react';
+import Navbar from './navbar';
 
-function App() {
-  const [count, setCount] = useState(0)
+const App: React.FC = () => {
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [sliderValue, setSliderValue] = useState(0);
+
+  const togglePlay = () => {
+    setIsPlaying(!isPlaying);
+  }
+
+  const handleSliderChange = (e) => {
+    setSliderValue(e.target.value);
+  }
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <div>
+      <Navbar />
+      <div style={{
+        backgroundColor: 'white',
+        color: 'black',
+        border: '2px solid limegreen',
+        padding: '20px',
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        textAlign: 'center',
+        borderRadius: '4px',
+        height: '300px',
+        width: '450px', 
+      }}>
+        <p>Hello, this is your centered div with slime green border!</p>
+        
+        <div style={{position: 'absolute', bottom: '10px', width: '100%'}}>
+          <button onClick={togglePlay}>{isPlaying ? "Pause" : "Play"}</button>
+          <input type="range" min="0" max="100" value={sliderValue} onChange={handleSliderChange} />
+        </div>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    </div>
+  );
 }
 
-export default App
+export default App;
