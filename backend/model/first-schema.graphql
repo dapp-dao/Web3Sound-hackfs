@@ -1,30 +1,10 @@
-type User{
-    name: String!
+type User @createModel(accountRelation: SINGLE, description: "User Profile"){
+    name: String! @string(minLength: 2, maxLength: 50)
     creator: Boolean!
-    playlist:[Int!]
 }
 
-type audio{
-    id: String!
-    creator: String!
-    tip: Int!
-    title: String!
-    photo: String
-    duration: String!
+type audio @createModel(accountRelation: LIST, description: "Audio metadata"){
+    creator: DID! @accountReference
+    title: String! @string(minLength: 2, maxLength: 50)
     likes: Int
-}
-
-type playlist{
-    id: String!
-    owner: String!
-    songs:[audio!]!
-    shared: Boolean!
-    people: [String!]
-}
-
-type likedTracks
-{
-    sender: String!
-    receiver: String!
-    amount: Int
 }

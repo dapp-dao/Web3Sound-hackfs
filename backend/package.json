@@ -4,11 +4,13 @@
   "main": "index.js",
   "license": "MIT",
   "devDependencies": {
+    "@composedb/client": "^0.4.4",
     "@composedb/devtools": "^0.4.4",
     "@composedb/devtools-node": "^0.4.4"
   },
   "dependencies": {
     "@ceramicnetwork/cli": "^2.31.0",
-    "@composedb/cli": "^0.4.5"
+    "@composedb/cli": "^0.4.5",
+    "did-session": "^2.0.1"
   }
 }
