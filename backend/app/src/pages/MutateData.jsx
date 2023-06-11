@@ -17,6 +17,7 @@ const CREATE_USER_MUTATION = gql
 `;
 
 function MutateData() {
+
   const {did, compose, client}= useContext(AuthContext);
   const [createUser, { loading, error }] = useMutation(CREATE_USER_MUTATION);
   
@@ -26,7 +27,7 @@ function MutateData() {
         variables: {
           input: {
             content: {
-              name: "Tejaswini",
+              name: "user1",
               creator: false,
             },
           },
@@ -46,7 +47,7 @@ function MutateData() {
   return (
     <>
       <h1>Mutate Data Page</h1>
-      <button disabled={loading}>Mutate Data</button>
+      <button >Mutate Data</button>
     </>
   );
 }
