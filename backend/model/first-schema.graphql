@@ -4,6 +4,7 @@ type User @createModel(accountRelation: SINGLE, description: "User Profile"){
 }
 
 type audio @createModel(accountRelation: LIST, description: "Audio metadata"){
+    creator: DID! @documentAccount
     title: String! @string(minLength: 2, maxLength: 50)
     likes: Int
 }

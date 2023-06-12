@@ -7,9 +7,9 @@ import { useState } from 'react';
 import {useHistory} from 'react-router-dom';
 
 function WalletConnect() {
-  const {setDid, compose} = useContext(AuthContext);
+  const {setDid, compose, setParentId, setSession} = useContext(AuthContext);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  var {session}= useContext(AuthContext);
+  var session;
   const history= useHistory();
 
   async function connectWallet() {
@@ -20,10 +20,12 @@ function WalletConnect() {
       const authMethod = await EthereumWebAuth.getAuthMethod(ethProvider, accountId);
 
       session = await DIDSession.authorize(authMethod, { resources: compose.resources });
+      setSession(session);
       console.log('Session:', session);
       console.log('session did: ', session.did);
       compose.setDID(session.did);
       console.log('Authenticated: ', compose);
+      setParentId(session.did._parentId);
 
 
     } catch (error) {
@@ -38,7 +40,7 @@ function WalletConnect() {
       {
         setIsAuthenticated(true);
         setDid(session.did._id);
-        history.push("/mutatedata");
+        history.push("/querydata");
       }).catch((err)=>{
         console.log('Error- ',err)
       })

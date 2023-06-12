@@ -10,10 +10,11 @@ import QueryData from './pages/QueryData';
 function App() {
   
   const [did, setDid] = useState(null);
-  var session;
+  const [parenId, setParentId]= useState(null);
+  const [session, setSession]= useState(null);
   return (
       <Switch>
-        <AuthContext.Provider value={{ did, setDid, session,compose, client }}>
+        <AuthContext.Provider value={{ did, setDid, session, setSession, compose, client, parenId, setParentId}}>
         <Route exact path="/" component={WalletConnect} />
         <Route path="/mutatedata" component={MutateData} />
         <Route path= "/querydata" component= {QueryData}/>
