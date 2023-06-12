@@ -5,8 +5,8 @@ import { AuthContext } from './context/AuthContext';
 import { useContext, useState } from 'react';
 import { client } from './client-objects/apolloClient';
 import {compose} from './client-objects/composeClient';
-import { Redirect } from 'react-router-dom/cjs/react-router-dom.min';
-import ProfilePage from './pages/ProfilePage';
+import QueryData from './pages/QueryData';
+
 function App() {
   
   const [did, setDid] = useState(null);
@@ -16,6 +16,7 @@ function App() {
         <AuthContext.Provider value={{ did, setDid, session,compose, client }}>
         <Route exact path="/" component={WalletConnect} />
         <Route path="/mutatedata" component={MutateData} />
+        <Route path= "/querydata" component= {QueryData}/>
         </AuthContext.Provider>
       </Switch>
   );
