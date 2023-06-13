@@ -1,6 +1,7 @@
 import { useMutation, gql } from '@apollo/client';
 import { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../context/AuthContext';
+import {useHistory} from 'react-router-dom';
 
 const CREATE_AUDIO_MUTATION = gql
 `
@@ -37,6 +38,8 @@ function MutateData() {
   const [name, setName]= useState('')
   const [creator, setCreator]= useState(false);
   const [creat, setCreat]= useState('');
+  const history= useHistory();
+
 
   const [createAudio, { loading, error }] = useMutation(CREATE_AUDIO_MUTATION);
   const [createUser, { loading2, error2 }] = useMutation(CREATE_USER_MUTATION);
@@ -147,6 +150,10 @@ function MutateData() {
         <br />
         <button type="submit">User</button>
       </form>
+
+      <button onClick={()=>{
+        history.push('/searchcreators');
+      }}>Search Creators</button>
     </>
   );
 }

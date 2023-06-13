@@ -6,6 +6,8 @@ import { useContext, useState } from 'react';
 import { client } from './client-objects/apolloClient';
 import {compose} from './client-objects/composeClient';
 import QueryData from './pages/QueryData';
+import UploadAudioFile from './pages/UploadAudioFile';
+import SearchCreators from './pages/SearchCreators';
 
 function App() {
   
@@ -18,6 +20,8 @@ function App() {
         <Route exact path="/" component={WalletConnect} />
         <Route path="/mutatedata" component={MutateData} />
         <Route path= "/querydata" component= {QueryData}/>
+        <Route path= "/uploadaudio" component= {UploadAudioFile}/>
+        <Route path="/searchcreators" component={SearchCreators}/>
         </AuthContext.Provider>
       </Switch>
   );

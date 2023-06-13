@@ -2,7 +2,6 @@ import { useContext } from 'react';
 import { EthereumWebAuth, getAccountId } from '@didtools/pkh-ethereum';
 import { DIDSession } from 'did-session';
 import { AuthContext } from '../context/AuthContext';
-import { Redirect } from 'react-router-dom/cjs/react-router-dom.min';
 import { useState } from 'react';
 import {useHistory} from 'react-router-dom';
 
@@ -40,7 +39,7 @@ function WalletConnect() {
       {
         setIsAuthenticated(true);
         setDid(session.did._id);
-        history.push("/querydata");
+        history.push("/mutatedata");
       }).catch((err)=>{
         console.log('Error- ',err)
       })

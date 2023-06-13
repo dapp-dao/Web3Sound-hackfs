@@ -26,9 +26,7 @@ const GET_AUDIO_FILES_QUERY = gql
 
 function QueryData() {
   const { client, parentId,session } = useContext(AuthContext);
-  console.log('Parent id: ', session.did._parentId);
-  const creatorId = session.did._parentId; // Assuming the creator ID is available in session._parentId
-  //const creatorId= "did:pkh:eip155:1:0xcdd4a0a113814085d1b73f4f473275fca59428f1"
+  const creatorId = session.did._parentId;
   const { loading, error, data } = useQuery(GET_AUDIO_FILES_QUERY, {
     client,
     variables: { creatorId },
