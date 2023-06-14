@@ -9,6 +9,8 @@ import QueryData from './pages/QueryData';
 import UploadAudioFile from './pages/UploadAudioFile';
 import SearchCreators from './pages/SearchCreators';
 import CreateProfile from './pages/CreateProfile';
+import NavBar from './components/navbar';
+
 
 function App() {
   
@@ -16,6 +18,8 @@ function App() {
   const [parenId, setParentId]= useState(null);
   const [session, setSession]= useState(null);
   return (
+    <Router>
+      <NavBar></NavBar>
       <Switch>
         <AuthContext.Provider value={{ did, setDid, session, setSession, compose, client, parenId, setParentId}}>
         <Route exact path="/" component={WalletConnect} />
@@ -26,6 +30,7 @@ function App() {
         <Route path="/createprofile" component={CreateProfile} />
         </AuthContext.Provider>
       </Switch>
+    </Router>
   );
 }
 
