@@ -1,4 +1,5 @@
 type User @createModel(accountRelation: SINGLE, description: "User Profile"){
+    did: DID! @documentAccount
     name: String! @string(minLength: 2, maxLength: 50)
     creator: Boolean!
 }
@@ -6,14 +7,8 @@ type User @createModel(accountRelation: SINGLE, description: "User Profile"){
 type audio @createModel(accountRelation: LIST, description: "Audio metadata"){
     creator: DID! @documentAccount
     title: String! @string(minLength: 2, maxLength: 50)
-    audio: String! @string(minLength: 2, maxLength: 200)
+    audioTrack: String! @string(minLength: 2, maxLength: 200)
+    audioImage: String! @string(minLength: 2, maxLength: 200)
     public: Boolean!
-    img: String! @string(minLength: 2, maxLength: 200)
     likes: Int
-}
-
-type follow @createModel(accountRelation: SINGLE, description: "Followers"){
-    follower: DID! @documentAccount
-    following: DID! @accountReference
-    amount: Float! @float(min: 0, max: 1000000)
 }

@@ -21,7 +21,6 @@ function WalletConnect() {
       session = await DIDSession.authorize(authMethod, { resources: compose.resources });
       setSession(session);
       console.log('Session:', session);
-      console.log('session did: ', session.did);
       compose.setDID(session.did);
       console.log('Authenticated: ', compose);
       setParentId(session.did._parentId);
@@ -39,7 +38,7 @@ function WalletConnect() {
       {
         setIsAuthenticated(true);
         setDid(session.did._id);
-        history.push("/mutatedata");
+        history.push("/createprofile");
       }).catch((err)=>{
         console.log('Error- ',err)
       })

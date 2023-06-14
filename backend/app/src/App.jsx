@@ -8,6 +8,7 @@ import {compose} from './client-objects/composeClient';
 import QueryData from './pages/QueryData';
 import UploadAudioFile from './pages/UploadAudioFile';
 import SearchCreators from './pages/SearchCreators';
+import CreateProfile from './pages/CreateProfile';
 
 function App() {
   
@@ -22,6 +23,7 @@ function App() {
         <Route path= "/querydata" component= {QueryData}/>
         <Route path= "/uploadaudio" component= {UploadAudioFile}/>
         <Route path="/searchcreators" component={SearchCreators}/>
+        <Route path="/createprofile" component={CreateProfile} />
         </AuthContext.Provider>
       </Switch>
   );

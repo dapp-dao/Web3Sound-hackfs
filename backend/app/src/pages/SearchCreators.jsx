@@ -2,11 +2,16 @@ import { useQuery, gql } from '@apollo/client';
 import { useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
 
-const GET_USERS_QUERY = gql`
+const GET_USERS_QUERY = gql
+`
   query {
     userIndex(first: 10) {
       edges {
         node {
+          did
+          {
+            id
+          }
           name
           creator
         }
@@ -25,7 +30,15 @@ function SearchCreators() {
   if (error) return <p>Error: {error.message}</p>;
 
   const users = data?.userIndex?.edges || [];
+
   const creatorUsers = users.filter((user) => user.node.creator);
+
+  const handleFollow = (userId) => {
+    const followedUser = creatorUsers.find((user) => user.node.id === userId);
+    if (followedUser) {
+      console.log(`Followed creator with wallet address/did key: ${followedUser.node.did.id}`);
+    }
+  };
 
   return (
     <>
@@ -33,18 +46,23 @@ function SearchCreators() {
 
       {creatorUsers.length > 0 ? (
         <ul>
-          {creatorUsers.map(({ node: user }) => (
-            <li key={user.name}>
+          {creatorUsers.map(({ node: user }, index) => (
+            <li key={index}>
               Name: {user.name} - Creator: {user.creator.toString()}
+              <button onClick={() => handleFollow(user.id)}>Follow</button>
             </li>
           ))}
         </ul>
       ) : (
         <p>No creator users found.</p>
       )}
+      <br/>
+      <br/>
+      <button onClick={()=>{
+        history.push('/searchcreators');
+      }}>Audio Store</button>
     </>
   );
 }
 
 export default SearchCreators;
-

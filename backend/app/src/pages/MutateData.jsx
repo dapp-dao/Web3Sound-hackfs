@@ -9,6 +9,7 @@ const CREATE_AUDIO_MUTATION = gql
     createaudio(input: $input) {
       document {
         likes
+        public
         title
       }
       clientMutationId
@@ -79,6 +80,7 @@ function MutateData() {
           input: {
             content: {
               title: title,
+              public: true,
               likes: intLikes,
             },
           },
