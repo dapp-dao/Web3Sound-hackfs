@@ -24,8 +24,8 @@ const GET_AUDIO_FILES_QUERY = gql
   }
 `;
 
-function QueryData() {
-  const { client, parentId,session } = useContext(AuthContext);
+function MyUploadedAudio() {
+  const { client,session } = useContext(AuthContext);
   const creatorId = session.did._parentId;
   const { loading, error, data } = useQuery(GET_AUDIO_FILES_QUERY, {
     client,
@@ -56,5 +56,5 @@ function QueryData() {
   );
 }
 
-export default QueryData;
+export default MyUploadedAudio;
 

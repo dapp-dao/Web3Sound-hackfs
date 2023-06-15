@@ -1,6 +1,6 @@
 import React from 'react'
 import { useMutation, gql } from '@apollo/client';
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useState } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import {useHistory} from 'react-router-dom';
 
@@ -93,6 +93,10 @@ function CreateProfile() {
       <button onClick={()=>{
         history.push('/searchcreators');
       }}>Search Creators</button>
+
+      <button onClick={()=>{
+        history.push('/audiostore');
+      }}>Audio Store</button>
     </>
     
   )

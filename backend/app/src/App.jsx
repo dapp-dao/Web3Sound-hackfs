@@ -5,10 +5,12 @@ import { AuthContext } from './context/AuthContext';
 import { useContext, useState } from 'react';
 import { client } from './client-objects/apolloClient';
 import {compose} from './client-objects/composeClient';
-import QueryData from './pages/QueryData';
+import QueryData from './pages/MyUploadedAudio';
 import UploadAudioFile from './pages/UploadAudioFile';
 import SearchCreators from './pages/SearchCreators';
 import CreateProfile from './pages/CreateProfile';
+import MyUploadedAudio from './pages/MyUploadedAudio';
+import AudioStore from './pages/AudioStore';
 
 function App() {
   
@@ -20,10 +22,11 @@ function App() {
         <AuthContext.Provider value={{ did, setDid, session, setSession, compose, client, parenId, setParentId}}>
         <Route exact path="/" component={WalletConnect} />
         <Route path="/mutatedata" component={MutateData} />
-        <Route path= "/querydata" component= {QueryData}/>
+        <Route path= "/myuploadedaudio" component= {MyUploadedAudio}/>
         <Route path= "/uploadaudio" component= {UploadAudioFile}/>
         <Route path="/searchcreators" component={SearchCreators}/>
         <Route path="/createprofile" component={CreateProfile} />
+        <Route path="/audiostore" component={AudioStore}/>
         </AuthContext.Provider>
       </Switch>
   );

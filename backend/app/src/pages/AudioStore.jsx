@@ -4,19 +4,15 @@ import { AuthContext } from '../context/AuthContext';
 
 const GET_AUDIO_FILES_QUERY = gql
 `
-  query audioFiles($creatorId: ID!) {
-    node(id: $creatorId) {
-      ... on CeramicAccount {
-        audioList(first: 10) {
-          edges {
-            node {
-              id
-              likes
-              title
-              creator {
-                id
-              }
-            }
+  query audioFiles($first: Int!) {
+    audioIndex(first: $first) {
+      edges {
+        node {
+          id
+          likes
+          title
+          creator {
+            id
           }
         }
       }
@@ -24,36 +20,37 @@ const GET_AUDIO_FILES_QUERY = gql
   }
 `;
 
-function QueryData() {
-  const { client, parentId,session } = useContext(AuthContext);
-  const creatorId = session.did._parentId;
+function AudioStore() {
+  const { client } = useContext(AuthContext);
   const { loading, error, data } = useQuery(GET_AUDIO_FILES_QUERY, {
     client,
-    variables: { creatorId },
+    variables: { first: 10 },
   });
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
 
-  const audioFiles = data?.node?.audioList?.edges || [];
+  const audioFiles = data?.audioIndex?.edges || [];
+
+  const sortedAudioFiles = audioFiles.sort((a, b) => b.node.likes - a.node.likes);
 
   return (
     <>
       <h1>Audio Files Page</h1>
 
-      {audioFiles.length > 0 ? (
+      {sortedAudioFiles.length > 0 ? (
         <ul>
-          {audioFiles.map(({ node: audio }) => (
+          {sortedAudioFiles.map(({ node: audio }) => (
             <li key={audio.id}>
               Title: {audio.title} - Likes: {audio.likes}
             </li>
           ))}
         </ul>
       ) : (
-        <p>No audio files found for the specified creator.</p>
+        <p>No audio files found.</p>
       )}
     </>
   );
 }
 
-export default QueryData;
+export default AudioStore;
