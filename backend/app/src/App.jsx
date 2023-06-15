@@ -11,6 +11,7 @@ import SearchCreators from './pages/SearchCreators';
 import CreateProfile from './pages/CreateProfile';
 import MyUploadedAudio from './pages/MyUploadedAudio';
 import AudioStore from './pages/AudioStore';
+import Dashboard from './pages/Dashboard';
 
 function App() {
   
@@ -27,6 +28,7 @@ function App() {
         <Route path="/searchcreators" component={SearchCreators}/>
         <Route path="/createprofile" component={CreateProfile} />
         <Route path="/audiostore" component={AudioStore}/>
+        <Route path="/dashboard" component={Dashboard}/>
         </AuthContext.Provider>
       </Switch>
   );

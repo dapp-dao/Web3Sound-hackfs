@@ -21,8 +21,6 @@ const CREATE_USER_MUTATION = gql
 function CreateProfile() {
     const {client } = useContext(AuthContext);
     const [name, setName]= useState('')
-    const [creator, setCreator]= useState(false);
-    const [creat, setCreat]= useState('');
     const history= useHistory();
 
     const [createUser, { loading2, error2 }] = useMutation(CREATE_USER_MUTATION);
@@ -31,17 +29,6 @@ function CreateProfile() {
         setName(event.target.value);
         }
     
-      const handleCreatorChange= (event)=>{
-        setCreat(event.target.value);
-        const boolval= parseInt(creat,10);
-        if(boolval){
-          setCreator(true);
-        }
-        else
-        {
-          setCreator(false);
-        }
-      }
 
       const handleSubmit2 = async (event) => {
         event.preventDefault();
@@ -52,7 +39,7 @@ function CreateProfile() {
               input: {
                 content: {
                   name: name,
-                  creator: creator,
+                  creator: false,
                 },
               },
             },
@@ -71,16 +58,11 @@ function CreateProfile() {
 
   return (
     <>
-    <div>CreateProfile</div>
+    <h2>Hey! Looks like you don't have a profile created yet.</h2>
     <form onSubmit={handleSubmit2}>
         <label>
           Name:
           <input type="text" value={name} onChange={handleNameChange} />
-        </label>
-        <br />
-        <label>
-          Creator:
-          <input type="number" value={creator} onChange={handleCreatorChange} />
         </label>
         <br />
         <button type="submit">User</button>

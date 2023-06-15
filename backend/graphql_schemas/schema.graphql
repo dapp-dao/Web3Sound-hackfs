@@ -69,6 +69,9 @@ type User implements Node {
   id: ID!
   name: String!
   creator: Boolean!
+
+  """Account controlling the document"""
+  did: CeramicAccount!
 }
 
 """A connection to a list of items."""
@@ -108,6 +111,11 @@ type audio implements Node {
   id: ID!
   likes: Int
   title: String!
+  public: Boolean!
+  audioImage: String!
+  audioTrack: String!
+
+  """Account controlling the document"""
   creator: CeramicAccount!
 }
 
@@ -218,13 +226,10 @@ input CreateaudioInput {
 input audioInput {
   likes: Int
   title: String!
-  creator: DID!
+  public: Boolean!
+  audioImage: String!
+  audioTrack: String!
 }
-
-"""
-A field whose value conforms to the standard DID format as specified in did-core: https://www.w3.org/TR/did-core/.
-"""
-scalar DID @specifiedBy(url: "https://www.w3.org/TR/did-core/")
 
 type UpdateaudioPayload {
   """Fetches an object given its ID"""
@@ -249,5 +254,7 @@ input UpdateaudioInput {
 input PartialaudioInput {
   likes: Int
   title: String
-  creator: DID
+  public: Boolean
+  audioImage: String
+  audioTrack: String
 }
