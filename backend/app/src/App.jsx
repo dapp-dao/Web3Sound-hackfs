@@ -12,6 +12,7 @@ import MyUploadedAudio from './pages/MyUploadedAudio';
 import AudioStore from './pages/AudioStore';
 import Dashboard from './pages/Dashboard';
 import NewAudioList from './pages/newMyAudio';
+import TempUpdateUser from './pages/tempUpdateUser';
 
 function App() {
   
@@ -31,6 +32,7 @@ function App() {
         <Route path="/audiostore" component={AudioStore}/>
         <Route path="/dashboard" component={Dashboard}/>
         <Route path="/newaudio" component={NewAudioList}/>
+        <Route path="/tempupdate" component={TempUpdateUser}/>
         </AuthContext.Provider>
       </Switch>
   );

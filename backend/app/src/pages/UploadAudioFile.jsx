@@ -22,7 +22,7 @@ const CREATE_AUDIO_MUTATION = gql
 `;
 
 function UploadAudioFile() {
-  const { client } = useContext(AuthContext);
+  const { client,data } = useContext(AuthContext);
   const [title, setTitle] = useState('');
   const [uploading, setUploading] = useState(false);
   const [cid, setCid] = useState('');
@@ -64,6 +64,7 @@ function UploadAudioFile() {
 
       if (data && data.createaudio) {
         setShowSuccessMessage(true); 
+
       }
     } catch (error) {
       console.log('Error occurred during mutation:', error);
