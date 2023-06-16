@@ -24,12 +24,14 @@ const CREATE_AUDIO_MUTATION = gql
 function UploadAudioFile() {
   const { client } = useContext(AuthContext);
   const [title, setTitle] = useState('');
-  const [likes, setLikes] = useState('');
-  const [intLikes, setIntLikes] = useState(0);
+  const [uploading, setUploading] = useState(false);
   const [cid, setCid] = useState('');
-  const web3client = new Web3Storage({ token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweDBBMjBDZGMwOWI5NjUwRDA3MWE3RWRjMjkwMjlkMDY5NDA2NENlNTQiLCJpc3MiOiJ3ZWIzLXN0b3JhZ2UiLCJpYXQiOjE2ODY2MTk4OTY0NjQsIm5hbWUiOiJBdWRpbyJ9.t3OwHAy0E6oL1LW79nI2foXeh26cLVYytGMhtN_0aJ4' });
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false); // Track success message visibility
+  const web3client = new Web3Storage({
+    token:
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweDBBMjBDZGMwOWI5NjUwRDA3MWE3RWRjMjkwMjlkMDY5NDA2NENlNTQiLCJpc3MiOiJ3ZWIzLXN0b3JhZ2UiLCJpYXQiOjE2ODY2MTk4OTY0NjQsIm5hbWUiOiJBdWRpbyJ9.t3OwHAy0E6oL1LW79nI2foXeh26cLVYytGMhtN_0aJ4',
+  });
   const history = useHistory();
-
 
   const [createAudio, { loading, error }] = useMutation(CREATE_AUDIO_MUTATION);
 
@@ -37,17 +39,11 @@ function UploadAudioFile() {
     setTitle(event.target.value);
   };
 
-  const handleLikesChange = (event) => {
-    setLikes(event.target.value);
-    const intval = parseInt(likes, 10);
-    setIntLikes(intval);
-  };
-
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     try {
-      await createAudio({
+      const { data } = await createAudio({
         variables: {
           input: {
             content: {
@@ -55,23 +51,25 @@ function UploadAudioFile() {
               audioTrack: cid,
               audioImage: 'bafybeiesvihx7glvmgcltfehkp5bevz6yxibyl5g2o5doja4oxdxg6ctma',
               public: true,
-              likes: intLikes,
+              likes: 0,
             },
           },
         },
-        context:{
-          client: client
-        }
+        context: {
+          client: client,
+        },
       });
 
-      if (loading) return <p>Loading...</p>;
       if (error) return <p>Error: {error.message}</p>;
 
-      console.log('Audio Mutation successful');
+      if (data && data.createaudio) {
+        setShowSuccessMessage(true); 
+      }
     } catch (error) {
       console.log('Error occurred during mutation:', error);
     }
   };
+
 
   async function storeWithProgress(file) {
     const onRootCidReady = (cid) => {
@@ -105,34 +103,50 @@ function UploadAudioFile() {
           <input type="text" value={title} onChange={handleTitleChange} />
         </label>
         <br />
-        <label>
-          Likes:
-          <input type="number" value={likes} onChange={handleLikesChange} />
-        </label>
-        <br />
-        <button type="submit">Audio</button>
         <div>UploadAudioFile</div>
         <input type="file" onChange={handleFileInputChange} />
         <button
           onClick={async () => {
             const fileInput = document.querySelector('input[type="file"]');
             const file = handleFileInputChange({ target: { files: fileInput.files } });
-            const cid = await storeWithProgress(file);
-            setCid(cid);
-            console.log('CID:', cid);
+            setUploading(true);
+            try {
+              const cid = await storeWithProgress(file);
+              setCid(cid);
+              console.log('CID:', cid);
+            } catch (error) {
+              console.log('Error occurred during file upload:', error);
+            } finally {
+              setUploading(false);
+            }
           }}
         >
+          Upload Audio
+        </button>
+        <br/>
+        <br/>
+        {uploading && <p>Uploading audio file...</p>}
+        <br/>
+        <button type="submit" disabled={!cid || uploading}>
           Upload
         </button>
+        <br/>
+        {loading && <p>Uploading your track...</p>}
+        {showSuccessMessage && <p>Audio uploaded successfully!</p>}
       </form>
-
-      <button onClick={() => {
-        history.push('/dashboard');
-      }}>Back to Dashboard</button>
-
-
+  
+      
+  
+      <button
+        onClick={() => {
+          history.push('/dashboard');
+        }}
+      >
+        Back to Dashboard
+      </button>
     </>
   );
+  
 }
 
 export default UploadAudioFile;

@@ -5,7 +5,6 @@ import { AuthContext } from './context/AuthContext';
 import { useContext, useState } from 'react';
 import { client } from './client-objects/apolloClient';
 import {compose} from './client-objects/composeClient';
-import QueryData from './pages/MyUploadedAudio';
 import UploadAudioFile from './pages/UploadAudioFile';
 import SearchCreators from './pages/SearchCreators';
 import CreateProfile from './pages/CreateProfile';
