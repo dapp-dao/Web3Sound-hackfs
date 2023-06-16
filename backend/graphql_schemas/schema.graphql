@@ -7,7 +7,7 @@ type Query {
 
   """Account currently authenticated on the Ceramic instance, if set"""
   viewer: CeramicAccount
-  userIndex(
+  followIndex(
     """Returns the items in the list that come after the specified cursor."""
     after: String
 
@@ -19,7 +19,7 @@ type Query {
 
     """Returns the last n items from the list."""
     last: Int
-  ): UserConnection
+  ): FollowConnection
   audioIndex(
     """Returns the items in the list that come after the specified cursor."""
     after: String
@@ -33,6 +33,19 @@ type Query {
     """Returns the last n items from the list."""
     last: Int
   ): audioConnection
+  userIndex(
+    """Returns the items in the list that come after the specified cursor."""
+    after: String
+
+    """Returns the first n items from the list."""
+    first: Int
+
+    """Returns the items in the list that come before the specified cursor."""
+    before: String
+
+    """Returns the last n items from the list."""
+    last: Int
+  ): UserConnection
 }
 
 """An object with an ID"""
@@ -49,7 +62,19 @@ type CeramicAccount implements Node {
   Whether the Ceramic instance is currently authenticated with this account or not
   """
   isViewer: Boolean!
-  user: User
+  followList(
+    """Returns the items in the list that come after the specified cursor."""
+    after: String
+
+    """Returns the first n items from the list."""
+    first: Int
+
+    """Returns the items in the list that come before the specified cursor."""
+    before: String
+
+    """Returns the last n items from the list."""
+    last: Int
+  ): FollowConnection
   audioList(
     """Returns the items in the list that come after the specified cursor."""
     after: String
@@ -63,24 +88,16 @@ type CeramicAccount implements Node {
     """Returns the last n items from the list."""
     last: Int
   ): audioConnection
-}
-
-type User implements Node {
-  id: ID!
-  name: String!
-  creator: Boolean!
-
-  """Account controlling the document"""
-  did: CeramicAccount!
+  user: User
 }
 
 """A connection to a list of items."""
-type audioConnection {
+type FollowConnection {
   """Information to aid in pagination."""
   pageInfo: PageInfo!
 
   """A list of edges."""
-  edges: [audioEdge]
+  edges: [FollowEdge]
 }
 
 """Information about pagination in a connection."""
@@ -96,6 +113,32 @@ type PageInfo {
 
   """When paginating forwards, the cursor to continue."""
   endCursor: String
+}
+
+"""An edge in a connection."""
+type FollowEdge {
+  """The item at the end of the edge"""
+  node: Follow
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
+type Follow implements Node {
+  id: ID!
+  following: CeramicAccount!
+
+  """Account controlling the document"""
+  follower: CeramicAccount!
+}
+
+"""A connection to a list of items."""
+type audioConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [audioEdge]
 }
 
 """An edge in a connection."""
@@ -119,6 +162,16 @@ type audio implements Node {
   creator: CeramicAccount!
 }
 
+type User implements Node {
+  id: ID!
+  name: String!
+  creator: Boolean!
+  followers: Int
+
+  """Account controlling the document"""
+  did: CeramicAccount!
+}
+
 """A connection to a list of items."""
 type UserConnection {
   """Information to aid in pagination."""
@@ -138,13 +191,15 @@ type UserEdge {
 }
 
 type Mutation {
-  createUser(input: CreateUserInput!): CreateUserPayload
-  updateUser(input: UpdateUserInput!): UpdateUserPayload
+  createFollow(input: CreateFollowInput!): CreateFollowPayload
+  updateFollow(input: UpdateFollowInput!): UpdateFollowPayload
   createaudio(input: CreateaudioInput!): CreateaudioPayload
   updateaudio(input: UpdateaudioInput!): UpdateaudioPayload
+  createUser(input: CreateUserInput!): CreateUserPayload
+  updateUser(input: UpdateUserInput!): UpdateUserPayload
 }
 
-type CreateUserPayload {
+type CreateFollowPayload {
   """Fetches an object given its ID"""
   node(
     """The ID of an object"""
@@ -153,21 +208,25 @@ type CreateUserPayload {
 
   """Account currently authenticated on the Ceramic instance, if set"""
   viewer: CeramicAccount
-  document: User!
+  document: Follow!
   clientMutationId: String
 }
 
-input CreateUserInput {
-  content: UserInput!
+input CreateFollowInput {
+  content: FollowInput!
   clientMutationId: String
 }
 
-input UserInput {
-  name: String!
-  creator: Boolean!
+input FollowInput {
+  following: DID!
 }
 
-type UpdateUserPayload {
+"""
+A field whose value conforms to the standard DID format as specified in did-core: https://www.w3.org/TR/did-core/.
+"""
+scalar DID @specifiedBy(url: "https://www.w3.org/TR/did-core/")
+
+type UpdateFollowPayload {
   """Fetches an object given its ID"""
   node(
     """The ID of an object"""
@@ -176,20 +235,19 @@ type UpdateUserPayload {
 
   """Account currently authenticated on the Ceramic instance, if set"""
   viewer: CeramicAccount
-  document: User!
+  document: Follow!
   clientMutationId: String
 }
 
-input UpdateUserInput {
+input UpdateFollowInput {
   id: ID!
-  content: PartialUserInput!
+  content: PartialFollowInput!
   options: UpdateOptionsInput
   clientMutationId: String
 }
 
-input PartialUserInput {
-  name: String
-  creator: Boolean
+input PartialFollowInput {
+  following: DID
 }
 
 input UpdateOptionsInput {
@@ -257,4 +315,54 @@ input PartialaudioInput {
   public: Boolean
   audioImage: String
   audioTrack: String
+}
+
+type CreateUserPayload {
+  """Fetches an object given its ID"""
+  node(
+    """The ID of an object"""
+    id: ID!
+  ): Node
+
+  """Account currently authenticated on the Ceramic instance, if set"""
+  viewer: CeramicAccount
+  document: User!
+  clientMutationId: String
+}
+
+input CreateUserInput {
+  content: UserInput!
+  clientMutationId: String
+}
+
+input UserInput {
+  name: String!
+  creator: Boolean!
+  followers: Int
+}
+
+type UpdateUserPayload {
+  """Fetches an object given its ID"""
+  node(
+    """The ID of an object"""
+    id: ID!
+  ): Node
+
+  """Account currently authenticated on the Ceramic instance, if set"""
+  viewer: CeramicAccount
+  document: User!
+  clientMutationId: String
+}
+
+input UpdateUserInput {
+  id: ID!
+  content: PartialUserInput!
+  options: UpdateOptionsInput
+  clientMutationId: String
+}
+
+input PartialUserInput {
+  name: String
+  creator: Boolean
+  followers: Int
 }

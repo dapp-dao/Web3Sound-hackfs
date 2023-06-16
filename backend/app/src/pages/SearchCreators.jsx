@@ -1,7 +1,7 @@
-import { useQuery, gql } from '@apollo/client';
+import { useQuery, useMutation, gql } from '@apollo/client';
 import { useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
-import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
+import { useHistory } from 'react-router-dom';
 
 const GET_USERS_QUERY = gql
 `
@@ -9,38 +9,63 @@ const GET_USERS_QUERY = gql
     userIndex(first: 10) {
       edges {
         node {
-          did
-          {
-            id
-          }
+          id
           name
           creator
+          did {
+            id
+          }
         }
       }
     }
   }
 `;
 
+const CREATE_FOLLOW_MUTATION = gql
+`
+  mutation CreateFollow($input: CreateFollowInput!) {
+    createFollow(input: $input) {
+      document {
+        id
+      }
+    }
+  }
+`;
+
 function SearchCreators() {
-  const history= useHistory();
+  const history = useHistory();
   const { client } = useContext(AuthContext);
   const { loading, error, data } = useQuery(GET_USERS_QUERY, {
     client,
   });
 
+  const [createFollow] = useMutation(CREATE_FOLLOW_MUTATION);
+
+  const handleFollow = async (userId) => {
+    const followedUser = data.userIndex.edges.find((user) => user.node.id === userId);
+    if (followedUser) {
+      try {
+        await createFollow({
+          variables: {
+            input: {
+              content: {
+                following: followedUser.node.did.id,
+              },
+            },
+          },
+        });
+        console.log(`Successfully followed creator with ID: ${followedUser.node.id}`);
+      } catch (error) {
+        console.log('Error creating follow:', error);
+      }
+    }
+  };
+
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
 
   const users = data?.userIndex?.edges || [];
-
   const creatorUsers = users.filter((user) => user.node.creator);
-
-  const handleFollow = (userId) => {
-    const followedUser = creatorUsers.find((user) => user.node.id === userId);
-    if (followedUser) {
-      console.log(`Followed creator with wallet address/did key: ${followedUser.node.did.id}`);
-    }
-  };
 
   return (
     <>
@@ -58,11 +83,9 @@ function SearchCreators() {
       ) : (
         <p>No creator users found.</p>
       )}
-      <br/>
-      <br/>
-      <button onClick={() => {
-        history.push('/dashboard');
-      }}>Back to Dashboard</button>
+      <br />
+      <br />
+      <button onClick={() => history.push('/dashboard')}>Back to Dashboard</button>
     </>
   );
 }

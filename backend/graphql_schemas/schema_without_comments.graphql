@@ -4,18 +4,24 @@ type Query {
   ): Node
 
   viewer: CeramicAccount
-  userIndex(
+  followIndex(
     after: String
     first: Int
     before: String
     last: Int
-  ): UserConnection
+  ): FollowConnection
   audioIndex(
     after: String
     first: Int
     before: String
     last: Int
   ): audioConnection
+  userIndex(
+    after: String
+    first: Int
+    before: String
+    last: Int
+  ): UserConnection
 }
 
 interface Node {
@@ -25,37 +31,47 @@ interface Node {
 type CeramicAccount implements Node {
   id: ID!
   isViewer: Boolean!
-  user: User
+  followList(
+    after: String
+    first: Int
+    before: String
+    last: Int
+  ): FollowConnection
   audioList(
     after: String
     first: Int
     before: String
     last: Int
   ): audioConnection
+  user: User
 }
 
-type User implements Node {
-  id: ID!
-  name: String!
-  creator: Boolean!
-
-  did: CeramicAccount!
-}
-
-type audioConnection {
+type FollowConnection {
   pageInfo: PageInfo!
-
-  edges: [audioEdge]
+  edges: [FollowEdge]
 }
 
 type PageInfo {
   hasNextPage: Boolean!
-
   hasPreviousPage: Boolean!
-
   startCursor: String
-
   endCursor: String
+}
+
+type FollowEdge {
+  node: Follow
+  cursor: String!
+}
+
+type Follow implements Node {
+  id: ID!
+  following: CeramicAccount!
+  follower: CeramicAccount!
+}
+
+type audioConnection {
+  pageInfo: PageInfo!
+  edges: [audioEdge]
 }
 
 type audioEdge {
@@ -70,8 +86,15 @@ type audio implements Node {
   public: Boolean!
   audioImage: String!
   audioTrack: String!
-
   creator: CeramicAccount!
+}
+
+type User implements Node {
+  id: ID!
+  name: String!
+  creator: Boolean!
+  followers: Int
+  did: CeramicAccount!
 }
 
 type UserConnection {
@@ -81,57 +104,58 @@ type UserConnection {
 
 type UserEdge {
   node: User
-
   cursor: String!
 }
 
 type Mutation {
-  createUser(input: CreateUserInput!): CreateUserPayload
-  updateUser(input: UpdateUserInput!): UpdateUserPayload
+  createFollow(input: CreateFollowInput!): CreateFollowPayload
+  updateFollow(input: UpdateFollowInput!): UpdateFollowPayload
   createaudio(input: CreateaudioInput!): CreateaudioPayload
   updateaudio(input: UpdateaudioInput!): UpdateaudioPayload
+  createUser(input: CreateUserInput!): CreateUserPayload
+  updateUser(input: UpdateUserInput!): UpdateUserPayload
 }
 
-type CreateUserPayload {
+type CreateFollowPayload {
   node(
     id: ID!
   ): Node
 
   viewer: CeramicAccount
-  document: User!
+  document: Follow!
   clientMutationId: String
 }
 
-input CreateUserInput {
-  content: UserInput!
+input CreateFollowInput {
+  content: FollowInput!
   clientMutationId: String
 }
 
-input UserInput {
-  name: String!
-  creator: Boolean!
+input FollowInput {
+  following: DID!
 }
 
-type UpdateUserPayload {
+scalar DID @specifiedBy(url: "https://www.w3.org/TR/did-core/")
+
+type UpdateFollowPayload {
   node(
     id: ID!
   ): Node
 
   viewer: CeramicAccount
-  document: User!
+  document: Follow!
   clientMutationId: String
 }
 
-input UpdateUserInput {
+input UpdateFollowInput {
   id: ID!
-  content: PartialUserInput!
+  content: PartialFollowInput!
   options: UpdateOptionsInput
   clientMutationId: String
 }
 
-input PartialUserInput {
-  name: String
-  creator: Boolean
+input PartialFollowInput {
+  following: DID
 }
 
 input UpdateOptionsInput {
@@ -187,4 +211,48 @@ input PartialaudioInput {
   public: Boolean
   audioImage: String
   audioTrack: String
+}
+
+type CreateUserPayload {
+  node(
+    id: ID!
+  ): Node
+
+  viewer: CeramicAccount
+  document: User!
+  clientMutationId: String
+}
+
+input CreateUserInput {
+  content: UserInput!
+  clientMutationId: String
+}
+
+input UserInput {
+  name: String!
+  creator: Boolean!
+  followers: Int
+}
+
+type UpdateUserPayload {
+  node(
+    id: ID!
+  ): Node
+
+  viewer: CeramicAccount
+  document: User!
+  clientMutationId: String
+}
+
+input UpdateUserInput {
+  id: ID!
+  content: PartialUserInput!
+  options: UpdateOptionsInput
+  clientMutationId: String
+}
+
+input PartialUserInput {
+  name: String
+  creator: Boolean
+  followers: Int
 }

@@ -21,8 +21,21 @@ const CREATE_AUDIO_MUTATION = gql
   }
 `;
 
+const USER_UPDATE_QUERY = gql
+`
+  mutation UpdateUser($input: UpdateUserInput!) {
+    updateUser(input: $input) {
+      document {
+        id
+        name
+        creator
+      }
+    }
+  }
+`;
+
 function UploadAudioFile() {
-  const { client,data } = useContext(AuthContext);
+  const { client,qData } = useContext(AuthContext);
   const [title, setTitle] = useState('');
   const [uploading, setUploading] = useState(false);
   const [cid, setCid] = useState('');
@@ -34,6 +47,7 @@ function UploadAudioFile() {
   const history = useHistory();
 
   const [createAudio, { loading, error }] = useMutation(CREATE_AUDIO_MUTATION);
+  const [updateUser, { loadingUpdate, errorUpdate }] = useMutation(USER_UPDATE_QUERY);
 
   const handleTitleChange = (event) => {
     setTitle(event.target.value);
@@ -41,9 +55,9 @@ function UploadAudioFile() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
+  
     try {
-      const { data } = await createAudio({
+      await createAudio({
         variables: {
           input: {
             content: {
@@ -58,19 +72,39 @@ function UploadAudioFile() {
         context: {
           client: client,
         },
+        onCompleted: (data) => {
+          if (data && data.createaudio) {
+            setShowSuccessMessage(true);
+            if (!qData.viewer.user.creator) {
+              handleUpdateUser();
+            }
+          }
+        },
       });
-
+  
       if (error) return <p>Error: {error.message}</p>;
-
-      if (data && data.createaudio) {
-        setShowSuccessMessage(true); 
-
-      }
     } catch (error) {
       console.log('Error occurred during mutation:', error);
     }
   };
+  
+  
+  const handleUpdateUser = async () => {
+    const input = {
+      id: qData.viewer.user.id,
+      content: {
+        creator: true,
+      },
+    };
 
+    try {
+      console.log('Before updating: ', qData.viewer.user.creator);
+      const { data } = await updateUser({ variables: { input } });
+      console.log('User updated:', data.updateUser.document);
+    } catch (error) {
+      console.log('Error updating user:', error);
+    }
+  };
 
   async function storeWithProgress(file) {
     const onRootCidReady = (cid) => {
@@ -134,6 +168,7 @@ function UploadAudioFile() {
         <br/>
         {loading && <p>Uploading your track...</p>}
         {showSuccessMessage && <p>Audio uploaded successfully!</p>}
+        {loadingUpdate && <p>Updating you to a creator! XD</p>}
       </form>
   
       

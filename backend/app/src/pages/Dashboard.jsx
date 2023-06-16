@@ -33,15 +33,14 @@ function Dashboard() {
       }}>My Uploads </button>
        <br/>
        <br/>
-       <button>My followers</button>
+       <button onClick={()=>{
+        history.push('/myfollowers')
+      }}>My followers</button>
        <br/>
        <br/>
        </>
 
       ):(<></>)}
-      <button >My playlist</button>
-      <br />
-      <br/>
       <button>Following</button>
       <br />
       <br/>

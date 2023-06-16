@@ -2,13 +2,19 @@ type User @createModel(accountRelation: SINGLE, description: "User Profile"){
     did: DID! @documentAccount
     name: String! @string(minLength: 2, maxLength: 50)
     creator: Boolean!
+    followers: Int
 }
 
 type audio @createModel(accountRelation: LIST, description: "Audio metadata"){
     creator: DID! @documentAccount
     title: String! @string(minLength: 2, maxLength: 50)
-    audioTrack: String! @string(minLength: 2, maxLength: 200)
-    audioImage: String! @string(minLength: 2, maxLength: 200)
+    audioTrack: String! @string(minLength: 0, maxLength: 200)
+    audioImage: String! @string(minLength: 0, maxLength: 200)
     public: Boolean!
     likes: Int
+}
+
+type Follow @createModel(accountRelation: LIST, description: "Follow details"){
+    follower: DID! @documentAccount
+    following: DID! @accountReference
 }

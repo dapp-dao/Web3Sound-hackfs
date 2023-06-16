@@ -40,6 +40,7 @@ function CreateProfile() {
                 content: {
                   name: name,
                   creator: false,
+                  followers:0
                 },
               },
             },
