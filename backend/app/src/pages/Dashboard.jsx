@@ -3,60 +3,34 @@ import React, { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 
-const GET_USERS_QUERY = gql`
-  query {
-    userIndex(first: 10) {
-      edges {
-        node {
-          did {
-            id
-          }
-          name
-          creator
-        }
-      }
-    }
-  }
-`;
 
 function Dashboard() {
   const history= useHistory();
-  const { session, client } = useContext(AuthContext);
-  const { loading, error, data } = useQuery(GET_USERS_QUERY, {
-    client,
-  });
+  const { qData } = useContext(AuthContext);
 
   const [isCreator, setIsCreator] = useState(false);
 
   useEffect(() => {
-    if (!loading && !error && data) {
-      checkIfCreator();
+    if(qData && qData.viewer.user){
+        console.log('qdata= ',qData);
+        checkIfCreator();
     }
-  }, [loading, error, data]);
+  }, []);
 
   async function checkIfCreator() {
-    const userID = session.did._parentId;
-    if (error) {
-      console.error('Error:', error.message);
-      return;
-    }
-    const users = data?.userIndex?.edges || [];
-
-    const creator = users.filter((user) => user.node.did.id === userID && user.node.creator === true);
-    const isUserCreator = creator.length > 0;
+    const isUserCreator = qData.viewer.user.creator
     console.log('isCreator?', isUserCreator);
     setIsCreator(isUserCreator);
   }
 
-  if (loading) {
-    return <p>Loading...</p>;
-  }
-
   return (
     <>
+     <h2>Welcome back, {qData.viewer.user.name} !</h2>
       {isCreator ? (
         <>
-       <button>My Uploads</button>
+       <button onClick={()=>{
+        history.push('/myuploadedaudio')
+      }}>My Uploads </button>
        <br/>
        <br/>
        <button>My followers</button>
@@ -65,19 +39,25 @@ function Dashboard() {
        </>
 
       ):(<></>)}
-      <button>My playlist</button>
+      <button >My playlist</button>
       <br />
       <br/>
       <button>Following</button>
       <br />
       <br/>
-      <button>Follow more</button>
+      <button onClick={()=>{
+        history.push('/searchcreators')
+      }}>Follow more</button>
       <br />
       <br/>
-      <button>Top Songs</button>
+      <button onClick={()=>{
+        history.push('/audiostore')
+      }}>Top Songs</button>
       <br/>
       <br/>
-      <button>Upload a track</button>
+      <button onClick={()=>{
+        history.push('/uploadaudio')
+      }}>Upload a track</button>
       <br/>
       <br/>
       <button onClick={()=>{
@@ -89,4 +69,3 @@ function Dashboard() {
 }
 
 export default Dashboard;
-

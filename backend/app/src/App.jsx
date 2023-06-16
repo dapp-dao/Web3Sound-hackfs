@@ -12,15 +12,17 @@ import CreateProfile from './pages/CreateProfile';
 import MyUploadedAudio from './pages/MyUploadedAudio';
 import AudioStore from './pages/AudioStore';
 import Dashboard from './pages/Dashboard';
+import NewAudioList from './pages/newMyAudio';
 
 function App() {
   
   const [did, setDid] = useState(null);
   const [parenId, setParentId]= useState(null);
   const [session, setSession]= useState(null);
+  const [qData, setQData]= useState(null); //the viewer data object
   return (
       <Switch>
-        <AuthContext.Provider value={{ did, setDid, session, setSession, compose, client, parenId, setParentId}}>
+        <AuthContext.Provider value={{ did, setDid, session, setSession, compose, client, parenId, setParentId, qData, setQData}}>
         <Route exact path="/" component={WalletConnect} />
         <Route path="/mutatedata" component={MutateData} />
         <Route path= "/myuploadedaudio" component= {MyUploadedAudio}/>
@@ -29,6 +31,7 @@ function App() {
         <Route path="/createprofile" component={CreateProfile} />
         <Route path="/audiostore" component={AudioStore}/>
         <Route path="/dashboard" component={Dashboard}/>
+        <Route path="/newaudio" component={NewAudioList}/>
         </AuthContext.Provider>
       </Switch>
   );

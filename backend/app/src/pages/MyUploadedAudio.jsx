@@ -1,6 +1,7 @@
 import { useQuery, gql } from '@apollo/client';
 import { useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
+import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 
 const GET_AUDIO_FILES_QUERY = gql
 `
@@ -25,6 +26,7 @@ const GET_AUDIO_FILES_QUERY = gql
 `;
 
 function MyUploadedAudio() {
+  const history= useHistory();
   const { client,session } = useContext(AuthContext);
   const creatorId = session.did._parentId;
   const { loading, error, data } = useQuery(GET_AUDIO_FILES_QUERY, {
@@ -52,6 +54,9 @@ function MyUploadedAudio() {
       ) : (
         <p>No audio files found for the specified creator.</p>
       )}
+       <button onClick={() => {
+        history.push('/dashboard');
+      }}>Back to Dashboard</button>
     </>
   );
 }

@@ -1,6 +1,7 @@
 import { useQuery, gql } from '@apollo/client';
 import { useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
+import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 
 const GET_USERS_QUERY = gql
 `
@@ -21,6 +22,7 @@ const GET_USERS_QUERY = gql
 `;
 
 function SearchCreators() {
+  const history= useHistory();
   const { client } = useContext(AuthContext);
   const { loading, error, data } = useQuery(GET_USERS_QUERY, {
     client,
@@ -58,9 +60,9 @@ function SearchCreators() {
       )}
       <br/>
       <br/>
-      <button onClick={()=>{
-        history.push('/searchcreators');
-      }}>Audio Store</button>
+      <button onClick={() => {
+        history.push('/dashboard');
+      }}>Back to Dashboard</button>
     </>
   );
 }

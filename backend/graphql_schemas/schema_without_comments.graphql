@@ -1,0 +1,190 @@
+type Query {
+  node(
+    id: ID!
+  ): Node
+
+  viewer: CeramicAccount
+  userIndex(
+    after: String
+    first: Int
+    before: String
+    last: Int
+  ): UserConnection
+  audioIndex(
+    after: String
+    first: Int
+    before: String
+    last: Int
+  ): audioConnection
+}
+
+interface Node {
+  id: ID!
+}
+
+type CeramicAccount implements Node {
+  id: ID!
+  isViewer: Boolean!
+  user: User
+  audioList(
+    after: String
+    first: Int
+    before: String
+    last: Int
+  ): audioConnection
+}
+
+type User implements Node {
+  id: ID!
+  name: String!
+  creator: Boolean!
+
+  did: CeramicAccount!
+}
+
+type audioConnection {
+  pageInfo: PageInfo!
+
+  edges: [audioEdge]
+}
+
+type PageInfo {
+  hasNextPage: Boolean!
+
+  hasPreviousPage: Boolean!
+
+  startCursor: String
+
+  endCursor: String
+}
+
+type audioEdge {
+  node: audio
+  cursor: String!
+}
+
+type audio implements Node {
+  id: ID!
+  likes: Int
+  title: String!
+  public: Boolean!
+  audioImage: String!
+  audioTrack: String!
+
+  creator: CeramicAccount!
+}
+
+type UserConnection {
+  pageInfo: PageInfo!
+  edges: [UserEdge]
+}
+
+type UserEdge {
+  node: User
+
+  cursor: String!
+}
+
+type Mutation {
+  createUser(input: CreateUserInput!): CreateUserPayload
+  updateUser(input: UpdateUserInput!): UpdateUserPayload
+  createaudio(input: CreateaudioInput!): CreateaudioPayload
+  updateaudio(input: UpdateaudioInput!): UpdateaudioPayload
+}
+
+type CreateUserPayload {
+  node(
+    id: ID!
+  ): Node
+
+  viewer: CeramicAccount
+  document: User!
+  clientMutationId: String
+}
+
+input CreateUserInput {
+  content: UserInput!
+  clientMutationId: String
+}
+
+input UserInput {
+  name: String!
+  creator: Boolean!
+}
+
+type UpdateUserPayload {
+  node(
+    id: ID!
+  ): Node
+
+  viewer: CeramicAccount
+  document: User!
+  clientMutationId: String
+}
+
+input UpdateUserInput {
+  id: ID!
+  content: PartialUserInput!
+  options: UpdateOptionsInput
+  clientMutationId: String
+}
+
+input PartialUserInput {
+  name: String
+  creator: Boolean
+}
+
+input UpdateOptionsInput {
+  replace: Boolean = false
+  version: CeramicCommitID
+}
+
+scalar CeramicCommitID @specifiedBy(url: "https://github.com/ceramicnetwork/CIP/blob/main/CIPs/CIP-59/CIP-59.md#commitid")
+
+type CreateaudioPayload {
+  node(
+    id: ID!
+  ): Node
+
+  viewer: CeramicAccount
+  document: audio!
+  clientMutationId: String
+}
+
+input CreateaudioInput {
+  content: audioInput!
+  clientMutationId: String
+}
+
+input audioInput {
+  likes: Int
+  title: String!
+  public: Boolean!
+  audioImage: String!
+  audioTrack: String!
+}
+
+type UpdateaudioPayload {
+  node(
+    id: ID!
+  ): Node
+
+  viewer: CeramicAccount
+  document: audio!
+  clientMutationId: String
+}
+
+input UpdateaudioInput {
+  id: ID!
+  content: PartialaudioInput!
+  options: UpdateOptionsInput
+  clientMutationId: String
+}
+
+input PartialaudioInput {
+  likes: Int
+  title: String
+  public: Boolean
+  audioImage: String
+  audioTrack: String
+}

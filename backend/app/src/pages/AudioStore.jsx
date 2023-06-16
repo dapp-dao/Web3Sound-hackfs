@@ -1,6 +1,7 @@
 import { useQuery, gql } from '@apollo/client';
 import { useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
+import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 
 const GET_AUDIO_FILES_QUERY = gql
 `
@@ -22,6 +23,7 @@ const GET_AUDIO_FILES_QUERY = gql
 
 function AudioStore() {
   const { client } = useContext(AuthContext);
+  const history= useHistory();
   const { loading, error, data } = useQuery(GET_AUDIO_FILES_QUERY, {
     client,
     variables: { first: 10 },
@@ -49,6 +51,9 @@ function AudioStore() {
       ) : (
         <p>No audio files found.</p>
       )}
+       <button onClick={() => {
+        history.push('/dashboard');
+      }}>Back to Dashboard</button>
     </>
   );
 }

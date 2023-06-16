@@ -59,7 +59,9 @@ function UploadAudioFile() {
             },
           },
         },
-        client, // Set the Apollo Client instance for the mutation
+        context:{
+          client: client
+        }
       });
 
       if (loading) return <p>Loading...</p>;
@@ -125,8 +127,8 @@ function UploadAudioFile() {
       </form>
 
       <button onClick={() => {
-        history.push('/querydata');
-      }}>My tracks</button>
+        history.push('/dashboard');
+      }}>Back to Dashboard</button>
 
 
     </>
