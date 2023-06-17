@@ -19,6 +19,7 @@
     "graphql": "^16.6.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-h5-audio-player": "^3.8.6",
     "react-router-dom": "5.2.0",
     "web3.storage": "^4.5.4"
   },
