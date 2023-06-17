@@ -15,6 +15,7 @@ import NewAudioList from './pages/newMyAudio';
 import TempUpdateUser from './pages/tempUpdateUser';
 import MyFollowers from './pages/MyFollowers';
 import newSearchCreators from './pages/newSearchCreators';
+import AudioPlayer from './pages/Player'
 
 function App() {
   
@@ -23,6 +24,7 @@ function App() {
   const [session, setSession]= useState(null);
   const [qData, setQData]= useState(null); //the viewer data object
   return (
+    <div className="flex bg-amber-200 items-center">
       <Switch>
         <AuthContext.Provider value={{ did, setDid, session, setSession, compose, client, parenId, setParentId, qData, setQData}}>
         <Route exact path="/" component={WalletConnect} />
@@ -36,8 +38,10 @@ function App() {
         <Route path="/newaudio" component={NewAudioList}/>
         <Route path="/tempupdate" component={TempUpdateUser}/>
         <Route path="/myfollowers" component={MyFollowers}/>
+        <Route path="/player" component = {AudioPlayer}/>
         </AuthContext.Provider>
       </Switch>
+      </div>
   );
 }
 
