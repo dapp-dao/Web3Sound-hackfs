@@ -1,17 +1,42 @@
 import React from 'react'
-import AudioPlayer from 'react-h5-audio-player'
+
 import Music from '/music.mp3'
-function Player() {
+import { Media, Player, controls,utils } from 'react-media-player'
+
+function AudioPlayer() {
+  const {
+    PlayPause,
+    CurrentTime,
+    Progress,
+    SeekBar,
+    Duration,
+    MuteUnmute,
+    Volume,
+    Fullscreen,
+  } = controls
+  const { keyboardControls } = utils
   return (
-    <div className="flex flex-col bg-blue w-screen h-screen items-center mt-20">AudioPlayer
-    <AudioPlayer 
-     autoPlay
-    src={Music}
-    layout="horizontal"
-    onPlay={() => console.log("onPlay")}
-    />
-    </div>
+    <Media>
+    {mediaProps => (
+      <div
+        className="media"
+        onKeyDown={keyboardControls.bind(null, mediaProps)}
+      >
+        <Player src={Music} className="media-player" />
+        <div className="media-controls">
+          <PlayPause />
+          <CurrentTime />
+          <Progress />
+          <SeekBar />
+          <Duration />
+          <MuteUnmute />
+          <Volume />
+          <Fullscreen />
+        </div>
+      </div>
+    )}
+  </Media>
   )
 }
 
-export default Player
+export default AudioPlayer
