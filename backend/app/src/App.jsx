@@ -23,6 +23,7 @@ function App() {
   const [session, setSession]= useState(null);
   const [qData, setQData]= useState(null); //the viewer data object
   return (
+    <div className="flex bg-amber-200 items-center">
       <Switch>
         <AuthContext.Provider value={{ did, setDid, session, setSession, compose, client, parenId, setParentId, qData, setQData}}>
         <Route exact path="/" component={WalletConnect} />
@@ -39,6 +40,7 @@ function App() {
         <Route path="/player" component = {Player}/>
         </AuthContext.Provider>
       </Switch>
+      </div>
   );
 }
 

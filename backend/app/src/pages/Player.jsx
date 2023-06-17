@@ -3,10 +3,11 @@ import AudioPlayer from 'react-h5-audio-player'
 import Music from '/music.mp3'
 function Player() {
   return (
-    <div>AudioPlayer
-    <AudioPlayer
+    <div className="flex flex-col bg-blue w-screen h-screen items-center mt-20">AudioPlayer
+    <AudioPlayer 
      autoPlay
     src={Music}
+    layout="horizontal"
     onPlay={() => console.log("onPlay")}
     />
     </div>
