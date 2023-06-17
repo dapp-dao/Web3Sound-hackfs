@@ -14,6 +14,7 @@ import Dashboard from './pages/Dashboard';
 import NewAudioList from './pages/newMyAudio';
 import TempUpdateUser from './pages/tempUpdateUser';
 import MyFollowers from './pages/MyFollowers';
+import newSearchCreators from './pages/newSearchCreators';
 
 function App() {
   
@@ -28,7 +29,7 @@ function App() {
         <Route path="/mutatedata" component={MutateData} />
         <Route path= "/myuploadedaudio" component= {MyUploadedAudio}/>
         <Route path= "/uploadaudio" component= {UploadAudioFile}/>
-        <Route path="/searchcreators" component={SearchCreators}/>
+        <Route path="/searchcreators" component={newSearchCreators}/>
         <Route path="/createprofile" component={CreateProfile} />
         <Route path="/audiostore" component={AudioStore}/>
         <Route path="/dashboard" component={Dashboard}/>

@@ -1,5 +1,6 @@
 import { gql, useQuery } from '@apollo/client';
 import React from 'react';
+import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 
 const GET_MY_FOLLOWERS = gql
 `
@@ -22,6 +23,7 @@ const GET_MY_FOLLOWERS = gql
 `;
 
 function MyFollowers() {
+    const history= useHistory();
   const { loading, error, data } = useQuery(GET_MY_FOLLOWERS);
 
   if (loading) return <p>Loading...</p>;
@@ -30,7 +32,7 @@ function MyFollowers() {
   const followers = data?.viewer?.followList?.edges || [];
 
   return (
-    <div>
+    <>
       <h1>My Followers</h1>
       {followers.length > 0 ? (
         <ul>
@@ -43,7 +45,10 @@ function MyFollowers() {
       ) : (
         <p>No followers found.</p>
       )}
-    </div>
+      <br />
+      <br />
+      <button onClick={() => history.push('/dashboard')}>Back to Dashboard</button>
+    </>
   );
 }
 

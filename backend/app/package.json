@@ -17,6 +17,7 @@
     "did-session": "^2.0.1",
     "dotenv": "^16.1.4",
     "graphql": "^16.6.0",
+    "lit-ceramic-sdk": "^1.1.13",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "5.2.0",

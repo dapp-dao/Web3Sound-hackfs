@@ -60,6 +60,11 @@ function Dashboard() {
       <br/>
       <br/>
       <button onClick={()=>{
+        history.push('/litceramic')
+      }}>Lit Ceramic</button>
+      <br/>
+      <br/>
+      <button onClick={()=>{
         history.push('/')
         window.location.reload();
       }}>Logout</button>
