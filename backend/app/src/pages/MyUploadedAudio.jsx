@@ -1,8 +1,24 @@
 import { useQuery, gql } from '@apollo/client';
 import { useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
-import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
+import { Link, useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 
+const GET_MY_AUDIO= gql 
+`
+  query{
+    viewer{
+      audioList(first: 10){
+        edges{
+          node{
+            id
+            title
+            audioTrack
+          }
+        }
+      }
+    }
+  }
+`
 const GET_AUDIO_FILES_QUERY = gql
 `
   query audioFiles($creatorId: ID!) {
@@ -13,6 +29,7 @@ const GET_AUDIO_FILES_QUERY = gql
             node {
               id
               likes
+              audioTrack
               title
               creator {
                 id
@@ -27,18 +44,18 @@ const GET_AUDIO_FILES_QUERY = gql
 
 function MyUploadedAudio() {
   const history= useHistory();
-  const { client,session } = useContext(AuthContext);
-  const creatorId = session.did._parentId;
-  const { loading, error, data } = useQuery(GET_AUDIO_FILES_QUERY, {
-    client,
-    variables: { creatorId },
-  });
+  // const { loading, error, data } = useQuery(GET_AUDIO_FILES_QUERY, {
+  //   client,
+  //   variables: { creatorId },
+  // });
+  const {loading, error, data}= useQuery(GET_MY_AUDIO);
+
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
 
-  const audioFiles = data?.node?.audioList?.edges || [];
-
+  const audioFiles = data?.viewer?.audioList?.edges || [];
+   console.log('audioFiles: ',audioFiles);
   return (
     <>
       <h1>Audio Files Page</h1>
@@ -47,7 +64,9 @@ function MyUploadedAudio() {
         <ul>
           {audioFiles.map(({ node: audio }) => (
             <li key={audio.id}>
-              Title: {audio.title} - Likes: {audio.likes}
+               <Link to={{ pathname: '/player', state: { audioId: audio.audioTrack, pg: true } }}>
+                {audio.title}
+              </Link>
             </li>
           ))}
         </ul>

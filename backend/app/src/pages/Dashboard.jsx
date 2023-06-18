@@ -41,7 +41,9 @@ function Dashboard() {
        </>
 
       ):(<></>)}
-      <button>Following</button>
+      <button onClick={()=>{
+        history.push('/myfollowing')
+      }}>Following</button>
       <br />
       <br/>
       <button onClick={()=>{

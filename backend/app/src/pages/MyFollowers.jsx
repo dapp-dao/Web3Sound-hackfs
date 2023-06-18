@@ -1,19 +1,23 @@
-import { gql, useQuery } from '@apollo/client';
-import React from 'react';
-import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
+import { gql, useMutation, useQuery } from '@apollo/client';
+import React, { useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 
 const GET_MY_FOLLOWERS = gql
 `
   query {
-    viewer {
-      followList(first: 10) {
-        edges {
-          node {
-            follower {
-              id
-              user{
+    followIndex(first: 50) {
+      edges {
+        node {
+          follower {
+            id
+            user{
               name
-              }
+            }
+          }
+          following {
+            id
+            user {
+              name
             }
           }
         }
@@ -22,23 +26,43 @@ const GET_MY_FOLLOWERS = gql
   }
 `;
 
+const GET_VIEWER = gql
+`
+  query {
+    viewer {
+      id
+      user {
+        did {
+          id
+        }
+      }
+    }
+  }
+`;
+
 function MyFollowers() {
-    const history= useHistory();
-  const { loading, error, data } = useQuery(GET_MY_FOLLOWERS);
+  const history = useHistory();
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error.message}</p>;
+  const { loading: viewerLoading, error: viewerError, data: viewerData } = useQuery(GET_VIEWER);
+  const { loading: followerLoading, error: followerError, data: followerData } = useQuery(GET_MY_FOLLOWERS);
 
-  const followers = data?.viewer?.followList?.edges || [];
+  if (viewerLoading || followerLoading) return <p>Loading...</p>;
+  if (viewerError) return <p>Error: {viewerError.message}</p>;
+  if (followerError) return <p>Error: {followerError.message}</p>;
 
+  const viewerId = viewerData?.viewer?.id;
+  const followers = followerData?.followIndex?.edges || [];
+  
+  const filteredFollowers = followers.filter(({ node }) => node.following.id === viewerId);
+  console.log('filtered followers= ',filteredFollowers);
   return (
     <>
       <h1>My Followers</h1>
-      {followers.length > 0 ? (
+      {filteredFollowers.length > 0 ? (
         <ul>
-          {followers.map(({ node }, index) => (
+          {filteredFollowers.map(({ node }, index) => (
             <li key={index}>
-              Follower ID: {node.follower.id} - Name: {node.follower.user.name}
+              name: {node?.follower?.user?.name}
             </li>
           ))}
         </ul>
@@ -53,4 +77,3 @@ function MyFollowers() {
 }
 
 export default MyFollowers;
-

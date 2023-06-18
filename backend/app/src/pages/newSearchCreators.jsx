@@ -133,7 +133,7 @@ function NewSearchCreators() {
                         return (
                             <li key={user.did.id}>
                                 Name: {user.name} - Creator: {user.creator.toString()}
-                                <button onClick={() => handleFollow(user.did.id)} disabled={isFollowed(user.did.id)}>Follow</button>
+                                <button onClick={() => handleFollow(user.did.id)} disabled={isFollowed(user.did.id) || nowFollowed.includes(user.did.id)}>{isFollowed(user.did.id) || nowFollowed.includes(user.did.id) ? 'Following': 'Follow'}</button>
                             </li>
                         );
                     })}

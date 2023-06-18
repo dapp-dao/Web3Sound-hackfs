@@ -1,10 +1,11 @@
 import { useQuery, gql, useMutation } from '@apollo/client';
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { useHistory } from 'react-router-dom';
 
 const GET_USERS_QUERY = gql
-`
+
+  `
   query {
     userIndex(first: 10) {
       edges {
@@ -22,7 +23,8 @@ const GET_USERS_QUERY = gql
 `;
 
 const GET_FOLLOWED_USERS_QUERY = gql
-`
+
+  `
   query {
     viewer {
       followList(first: 10) {
@@ -39,7 +41,8 @@ const GET_FOLLOWED_USERS_QUERY = gql
 `;
 
 const CREATE_FOLLOW_MUTATION = gql
-`
+
+  `
   mutation CreateFollow($input: CreateFollowInput!) {
     createFollow(input: $input) {
       document {
@@ -99,14 +102,20 @@ function SearchCreators() {
 
   const users = usersData?.userIndex?.edges || [];
   const creatorUsers = users.filter((user) => user.node.creator);
-  console.log('creatorusers= ',creatorUsers)
+  console.log('creatorusers= ', creatorUsers)
 
   const followedUsersEdges = followedUsersData?.viewer?.followList?.edges || [];
-  const followedUserIds = followedUsersEdges.map((edge) => edge.node.follower.id);
+  console.log('followed user: ', followedUsersEdges);
+
+  useEffect(()=>{
+    console.log('creatorUsers= ',creatorUsers);
+    console.log('followed user= ',followedUsersEdges);
+  },[creatorUsers,followedUsersEdges])
+
   return (
     <>
       <h1>Creators</h1>
-  
+
       {creatorUsers.length > 0 ? (
         <ul>
           {creatorUsers.map(({ node: user }, index) => {
@@ -129,6 +138,6 @@ function SearchCreators() {
       <button onClick={() => history.push('/dashboard')}>Back to Dashboard</button>
     </>
   );
-  
+
 }
 export default SearchCreators;

@@ -16,6 +16,8 @@ import TempUpdateUser from './pages/tempUpdateUser';
 import MyFollowers from './pages/MyFollowers';
 import newSearchCreators from './pages/newSearchCreators';
 import AudioPlayer from './pages/Player'
+import { web3client } from './client-objects/web3client';
+import Following from './pages/Following';
 
 function App() {
   
@@ -24,9 +26,9 @@ function App() {
   const [session, setSession]= useState(null);
   const [qData, setQData]= useState(null); //the viewer data object
   return (
-    <div className="flex bg-amber-200 items-center">
+    <div>
       <Switch>
-        <AuthContext.Provider value={{ did, setDid, session, setSession, compose, client, parenId, setParentId, qData, setQData}}>
+        <AuthContext.Provider value={{ did, setDid, session, setSession, compose, client, parenId, setParentId, qData, setQData, web3client}}>
         <Route exact path="/" component={WalletConnect} />
         <Route path="/mutatedata" component={MutateData} />
         <Route path= "/myuploadedaudio" component= {MyUploadedAudio}/>
@@ -39,6 +41,7 @@ function App() {
         <Route path="/tempupdate" component={TempUpdateUser}/>
         <Route path="/myfollowers" component={MyFollowers}/>
         <Route path="/player" component = {AudioPlayer}/>
+        <Route path='/myfollowing' component={Following} />
         </AuthContext.Provider>
       </Switch>
       </div>
