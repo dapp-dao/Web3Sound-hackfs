@@ -1,0 +1,33 @@
+.following-main{
+
+}
+.following-list{
+    display: flex;
+    margin-bottom:16px ;
+}
+.following-list-image{
+    height: 60px;
+    width: 60px;
+}
+.following-title{
+    margin-top: 40px;
+    margin-bottom: 60px;
+}
+.following-details{
+    margin-left: 10px;
+    display: flex;
+    flex-direction: row;
+}
+.name {
+    font-size: 1.2em; /* Adjust the font size for the name */
+  }
+  
+  .id {
+    font-size: 1em; /* Adjust the font size for the ID */
+  }
+
+  .following-button{
+    background-color: slateblue;
+    color: whitesmoke;
+  }
+  

@@ -11,7 +11,6 @@ import CreateProfile from './pages/CreateProfile';
 import MyUploadedAudio from './pages/MyUploadedAudio';
 import AudioStore from './pages/AudioStore';
 import Dashboard from './pages/Dashboard';
-import NewAudioList from './pages/newMyAudio';
 import TempUpdateUser from './pages/tempUpdateUser';
 import MyFollowers from './pages/MyFollowers';
 import newSearchCreators from './pages/newSearchCreators';
@@ -37,7 +36,6 @@ function App() {
         <Route path="/createprofile" component={CreateProfile} />
         <Route path="/audiostore" component={AudioStore}/>
         <Route path="/dashboard" component={Dashboard}/>
-        <Route path="/newaudio" component={NewAudioList}/>
         <Route path="/tempupdate" component={TempUpdateUser}/>
         <Route path="/myfollowers" component={MyFollowers}/>
         <Route path="/player" component = {AudioPlayer}/>

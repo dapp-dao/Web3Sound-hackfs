@@ -1,7 +1,8 @@
 import { useQuery, gql } from '@apollo/client';
 import { useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
-import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
+import { Link,useHistory } from 'react-router-dom/cjs/react-router-dom.min';
+import './MyUploadedAudio.css'
 
 const GET_AUDIO_FILES_QUERY = gql
 `
@@ -11,6 +12,7 @@ const GET_AUDIO_FILES_QUERY = gql
         node {
           id
           likes
+          audioTrack
           title
           creator {
             id
@@ -38,22 +40,36 @@ function AudioStore() {
 
   return (
     <>
-      <h1>Audio Files Page</h1>
+      <h1 className='my-audio-title'>All Tracks</h1>
 
       {sortedAudioFiles.length > 0 ? (
         <ul>
-          {sortedAudioFiles.map(({ node: audio }) => (
+          {sortedAudioFiles.map(({ node: audio }) => {
+            if (audio.audioTrack === '') {
+              return null; // Skip rendering if audioTrack is null
+            }
+            return(
+            <div className='song-list'>
+            <img src='../../public/cover.jpg' alt='Cover' className='song-list-image' />
+            <div className='song-details'>
             <li key={audio.id}>
-              Title: {audio.title} - Likes: {audio.likes}
+            <Link to={{ pathname: '/player', state: { audioId: audio.audioTrack, pg: false , name: audio.title} }}>
+                  {audio.title}
+                </Link>
             </li>
-          ))}
+            </div>
+          </div>
+            )
+            })}
         </ul>
       ) : (
         <p>No audio files found.</p>
       )}
-       <button onClick={() => {
+       <button className='my-audio-button' onClick={() => {
         history.push('/dashboard');
       }}>Back to Dashboard</button>
+      <br/>
+      <br/>
     </>
   );
 }

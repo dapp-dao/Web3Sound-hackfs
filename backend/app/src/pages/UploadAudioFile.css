@@ -1,0 +1,28 @@
+.upload-title{
+    margin-top: 40px;
+    margin-bottom: 40px;
+}
+.input-box {
+    margin-left: 20px;
+    padding: 8px 12px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: border-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  }
+  
+  .input-box:focus {
+    outline: none;
+    border-color: slateblue;
+  }
+
+  .outlined-upload-button{
+    border: 1px slateblue solid;
+    color: whitesmoke;
+  }
+
+  .upload-button{
+    background-color: slateblue;
+    color: whitesmoke;
+  }

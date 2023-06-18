@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { Web3Storage } from 'web3.storage';
 import { useMutation, gql } from '@apollo/client';
-import { useContext, useEffect } from 'react';
+import { useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { useHistory } from 'react-router-dom';
+import './UploadAudioFile.css'
 
 const CREATE_AUDIO_MUTATION = gql
   `
@@ -22,7 +23,7 @@ const CREATE_AUDIO_MUTATION = gql
 `;
 
 const USER_UPDATE_QUERY = gql
-`
+  `
   mutation UpdateUser($input: UpdateUserInput!) {
     updateUser(input: $input) {
       document {
@@ -35,7 +36,7 @@ const USER_UPDATE_QUERY = gql
 `;
 
 function UploadAudioFile() {
-  const { client,qData } = useContext(AuthContext);
+  const { client, qData } = useContext(AuthContext);
   const [title, setTitle] = useState('');
   const [uploading, setUploading] = useState(false);
   const [cid, setCid] = useState('');
@@ -53,16 +54,16 @@ function UploadAudioFile() {
     setTitle(event.target.value);
   };
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = async (event, cidTrack) => {
     event.preventDefault();
-  
+
     try {
       await createAudio({
         variables: {
           input: {
             content: {
               title: title,
-              audioTrack: cid,
+              audioTrack: cidTrack,
               audioImage: 'bafybeiesvihx7glvmgcltfehkp5bevz6yxibyl5g2o5doja4oxdxg6ctma',
               public: true,
               likes: 0,
@@ -81,14 +82,14 @@ function UploadAudioFile() {
           }
         },
       });
-  
+
       if (error) return <p>Error: {error.message}</p>;
     } catch (error) {
       console.log('Error occurred during mutation:', error);
     }
   };
-  
-  
+
+
   const handleUpdateUser = async () => {
     const input = {
       id: qData.viewer.user.id,
@@ -120,9 +121,9 @@ function UploadAudioFile() {
       console.log(`Uploading... ${pct.toFixed(2)}% complete`);
     };
 
-    const cid = await web3client.put([file], { onRootCidReady, onStoredChunk });
-    console.log('Upload completed. CID:', cid);
-    return cid;
+    const cidAfterWeb3 = await web3client.put([file], { onRootCidReady, onStoredChunk });
+    console.log('Upload completed. CID:', cidAfterWeb3);
+    return cidAfterWeb3;
   }
 
   function handleFileInputChange(event) {
@@ -132,22 +133,28 @@ function UploadAudioFile() {
 
   return (
     <>
-      <form onSubmit={handleSubmit}>
+      <h1 className='upload-title'>Upload your track</h1>
+      <form onSubmit={(event)=> handleSubmit(event, cid)}>
         <label>
           Title:
-          <input type="text" value={title} onChange={handleTitleChange} />
+          <input type="text" className='input-box' value={title} onChange={handleTitleChange} />
         </label>
         <br />
-        <div>UploadAudioFile</div>
-        <input type="file" onChange={handleFileInputChange} />
+        <br/>
+        <label>Audio: 
+        <input type="file" className='input-box' onChange={handleFileInputChange} />
+        </label>
+        <br/>
+        <br/>
         <button
+          className='outlined-upload-button'
           onClick={async () => {
             const fileInput = document.querySelector('input[type="file"]');
             const file = handleFileInputChange({ target: { files: fileInput.files } });
             setUploading(true);
             try {
-              const cid = await storeWithProgress(file);
-              setCid(cid);
+              const cidReturned = await storeWithProgress(file);
+              setCid(cidReturned);
               console.log('CID:', cid);
             } catch (error) {
               console.log('Error occurred during file upload:', error);
@@ -158,31 +165,40 @@ function UploadAudioFile() {
         >
           Upload Audio
         </button>
-        <br/>
-        <br/>
+        <br />
+        <br />
         {uploading && <p>Uploading audio file...</p>}
+        <br />
         <br/>
-        <button type="submit" disabled={!cid || uploading}>
+        <br/>
+        <br/>
+        <button type="submit" className='outlined-upload-button' disabled={!cid || uploading}>
           Upload
         </button>
-        <br/>
+        <br />
         {loading && <p>Uploading your track...</p>}
         {showSuccessMessage && <p>Audio uploaded successfully!</p>}
         {loadingUpdate && <p>Updating you to a creator! XD</p>}
       </form>
-  
-      
-  
+
+
+      <br/>
+      <br/>
+      <br/>
+      <br/>
       <button
+      className='upload-button'
         onClick={() => {
           history.push('/dashboard');
         }}
       >
         Back to Dashboard
       </button>
+      <br/>
+      <br/>
     </>
   );
-  
+
 }
 
 export default UploadAudioFile;

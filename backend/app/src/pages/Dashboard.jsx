@@ -2,6 +2,7 @@ import { gql, useQuery } from '@apollo/client';
 import React, { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
+import './Dashboard.css';
 
 
 function Dashboard() {
@@ -24,16 +25,16 @@ function Dashboard() {
   }
 
   return (
-    <>
-     <h2>Welcome back, {qData.viewer.user.name} !</h2>
+    <div className='dashboard-main'>
+     <h1 className='dashboard-title'>Welcome back, {qData.viewer.user.name} !</h1>
       {isCreator ? (
         <>
-       <button onClick={()=>{
+       <button className='dashboard-button' onClick={()=>{
         history.push('/myuploadedaudio')
       }}>My Uploads </button>
        <br/>
        <br/>
-       <button onClick={()=>{
+       <button className='dashboard-button' onClick={()=>{
         history.push('/myfollowers')
       }}>My followers</button>
        <br/>
@@ -41,36 +42,33 @@ function Dashboard() {
        </>
 
       ):(<></>)}
-      <button onClick={()=>{
+      <button className='dashboard-button' onClick={()=>{
         history.push('/myfollowing')
       }}>Following</button>
       <br />
       <br/>
-      <button onClick={()=>{
+      <button className='dashboard-button' onClick={()=>{
         history.push('/searchcreators')
       }}>Follow more</button>
       <br />
       <br/>
-      <button onClick={()=>{
+      <button className='dashboard-button' onClick={()=>{
         history.push('/audiostore')
       }}>Top Songs</button>
       <br/>
       <br/>
-      <button onClick={()=>{
+      <button className='dashboard-button' onClick={()=>{
         history.push('/uploadaudio')
       }}>Upload a track</button>
       <br/>
       <br/>
-      <button onClick={()=>{
-        history.push('/litceramic')
-      }}>Lit Ceramic</button>
-      <br/>
-      <br/>
-      <button onClick={()=>{
+      <button className='dashboard-button' onClick={()=>{
         history.push('/')
         window.location.reload();
       }}>Logout</button>
-    </>
+      <br/>
+      <br/>
+    </div>
   );
 }
 

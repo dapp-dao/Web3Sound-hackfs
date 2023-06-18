@@ -1,0 +1,18 @@
+.wallet-connect-main {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    align-items: center;
+    height: 100vh; /* Optional: Set the container height to full viewport height */
+  }
+  
+  .title {
+    margin-bottom: 40px;
+  }
+  
+  .btn-class {
+    background-color: slateblue;
+    color: whitesmoke;
+  }
+  

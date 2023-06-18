@@ -1,6 +1,7 @@
 import { gql, useMutation, useQuery } from '@apollo/client';
 import React, { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
+import './MyFollowers.css'
 
 const GET_MY_FOLLOWERS = gql
 `
@@ -56,14 +57,21 @@ function MyFollowers() {
   const filteredFollowers = followers.filter(({ node }) => node.following.id === viewerId);
   console.log('filtered followers= ',filteredFollowers);
   return (
-    <>
-      <h1>My Followers</h1>
+    <div className='followers-main'>
+      <h1 className='followers-title'>My Followers</h1>
       {filteredFollowers.length > 0 ? (
         <ul>
           {filteredFollowers.map(({ node }, index) => (
+            <div className='followers-list'>
+              <img src='../../public/profilepic.png' alt='profile' className='following-list-image' />
+              <div className='followers-details'>
             <li key={index}>
-              name: {node?.follower?.user?.name}
+              <span className="followers-name">{node?.follower?.user?.name}</span>
+              <br/>
+              <span className="followers-id">{node?.follower?.id}</span>
             </li>
+            </div>
+            </div>
           ))}
         </ul>
       ) : (
@@ -71,8 +79,10 @@ function MyFollowers() {
       )}
       <br />
       <br />
-      <button onClick={() => history.push('/dashboard')}>Back to Dashboard</button>
-    </>
+      <button className='followers-button' onClick={() => history.push('/dashboard')}>Back to Dashboard</button>
+      <br/>
+      <br/>
+    </div>
   );
 }
 

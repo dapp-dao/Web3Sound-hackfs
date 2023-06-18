@@ -4,6 +4,8 @@ import { DIDSession } from 'did-session';
 import { useHistory } from 'react-router-dom';
 import { gql, useLazyQuery } from '@apollo/client';
 import { EthereumWebAuth, getAccountId } from '@didtools/pkh-ethereum';
+import './WalletConnect.css';
+
 
 const GET_USERS_QUERY = gql`
   query {
@@ -84,11 +86,12 @@ function WalletConnect() {
   }
 
   return (
-    <>
-      <h1>Wallet Connect Page</h1>
-      <button onClick={connectWallet}>Connect Wallet</button>
-    </>
+    <div className='wallet-connect-main'>
+      <h1 className='title'>web3Sound</h1>
+      <button className='btn-class' onClick={connectWallet}>Connect Wallet</button>
+    </div>
   );
+  
 }
 
 export default WalletConnect;

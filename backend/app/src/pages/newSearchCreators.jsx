@@ -3,6 +3,7 @@ import { useQuery, gql, useMutation } from '@apollo/client';
 import { useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { useHistory } from 'react-router-dom';
+import './newSearchCreators.css';
 
 const GET_USERS_QUERY = gql
     `
@@ -61,6 +62,7 @@ function NewSearchCreators() {
     const history = useHistory();
     const { client } = useContext(AuthContext);
     const [nowFollowed, setNowFollowed] = useState([]);
+    const[newFollowed, setNewFollowed]=useState('');
     const { loading: usersLoading, error: usersError, data: usersData } = useQuery(GET_USERS_QUERY, {
         client,
     });
@@ -91,6 +93,7 @@ function NewSearchCreators() {
                     console.log('Followed creator with did: ', data);
                     console.log('now Followed: ', data.createFollow.document.following.id)
                     setNowFollowed((prevArray) => { [...prevArray, data.createFollow.document.following.id] })
+                    setNewFollowed(data.createFollow.document.following.id);
                 }
             })
         }
@@ -122,19 +125,29 @@ function NewSearchCreators() {
 
     return (
         <>
-            <h1>Creators</h1>
+            <h1 className='creator-title'>Creators</h1>
 
             {creatorUsers.length > 0 ? (
                 <ul>
                     {creatorUsers.map(({ node: user }) => {
                         if (user.did.id === currentId) {
-                            return null; // Skip rendering the creator details
+                            return null;
                         }
                         return (
+                            <div className='creator-list'>
+                            <img src='../../public/profilepic.png' alt='profile' className='creator-list-image' />
+                            <div className='creator-details'>
                             <li key={user.did.id}>
-                                Name: {user.name} - Creator: {user.creator.toString()}
-                                <button onClick={() => handleFollow(user.did.id)} disabled={isFollowed(user.did.id) || nowFollowed.includes(user.did.id)}>{isFollowed(user.did.id) || nowFollowed.includes(user.did.id) ? 'Following': 'Follow'}</button>
+                                <span className="creator-name">{user.name}</span>
+                                <br />
+                                <span className="creator-id">{user.did.id}</span>
+                                <span> -- </span>
+                                
+                                <button onClick={() => handleFollow(user.did.id)} disabled={isFollowed(user.did.id) ||newFollowed && newFollowed===user.did.id}>{isFollowed(user.did.id) || newFollowed && newFollowed===user.did.id ? <span>Following</span>: <span>Follow</span>}</button>
+                               
                             </li>
+                            </div>
+                            </div>
                         );
                     })}
                 </ul>
@@ -145,7 +158,9 @@ function NewSearchCreators() {
 
             <br />
             <br />
-            <button onClick={() => history.push('/dashboard')}>Back to Dashboard</button>
+            <button className='creator-button' onClick={() => history.push('/dashboard')}>Back to Dashboard</button>
+            <br/>
+            <br/>
         </>
     );
 }

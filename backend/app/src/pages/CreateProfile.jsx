@@ -3,6 +3,8 @@ import { useMutation, gql } from '@apollo/client';
 import { useContext, useState } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { useHistory } from 'react-router-dom';
+import './CreateProfile.css';
+import './UploadAudioFile.css';
 
 const CREATE_USER_MUTATION = gql
   `
@@ -59,24 +61,28 @@ function CreateProfile() {
 
   return (
     <>
-      <h2>Hey! Looks like you don't have a profile created yet.</h2>
+      <h1 className='create-profile-title'>Create Profile</h1>
+      <span className='hey-you'>Hey! Looks like you haven't created a profile yet.</span>
+      <br/>
+      <br/>
       <form onSubmit={handleSubmit2}>
         <label>
           Name:
-          <input type="text" value={name} onChange={handleNameChange} />
+          <input type="text" className='input-box' value={name} onChange={handleNameChange} />
         </label>
         <br />
         <br />
         <br />
-        <button type="submit">Submit</button>
+        <button className='outlined-upload-button' type="submit">Submit</button>
         <br />
         {loading2 && <p>Creating profile...</p>}
       </form>
       <br />
       <br />
-      <button onClick={() => {
-        history.push('/dashboard');
-      }}>Go to Dashboard</button>
+      <button className='upload-button' onClick={() => {
+        history.push('/');
+        window.location.reload
+      }}>Go to Home Page</button>
 
     </>
 

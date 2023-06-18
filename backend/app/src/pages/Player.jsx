@@ -3,6 +3,7 @@ import { Media, Player, controls, utils } from 'react-media-player';
 import { web3client } from '../client-objects/web3client';
 import { useLocation } from 'react-router-dom';
 import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
+import './Player.css'
 
 function AudioPlayer() {
   const {
@@ -17,7 +18,7 @@ function AudioPlayer() {
   } = controls;
 
   const location = useLocation();
-  const { audioId, pg } = location.state;
+  const { audioId, pg, name } = location.state;
   const history = useHistory();
 
   const { keyboardControls } = utils;
@@ -44,49 +45,56 @@ function AudioPlayer() {
   }, [audioId]);
 
   return (
-    <>
+    <div className='player-main'>
       {exists ? (<>
         <Media>
           {mediaProps => (
             <div
               className="media"
-              onKeyDown={keyboardControls.bind(null, mediaProps)}
-            >
+              onKeyDown={keyboardControls.bind(null, mediaProps)}>
               <Player src={path} className="media-player" />
               <div className="media-controls">
-                <PlayPause />
+                <div className='song-player-title'>{name}</div>
+                <div className='cover-image'>
+                <img src='../../public/cover.jpg' alt='Cover' className='song-cover-image' />
+                </div>
+                <div className='seek-bar'>
                 <CurrentTime />
-                <Progress />
                 <SeekBar />
                 <Duration />
+                </div>
+                <PlayPause className='border-boxed' />
+                <div>
                 <MuteUnmute />
                 <Volume />
-                <Fullscreen />
+                </div>
+                <br/>
+                <br/>
+                <br/>
               </div>
             </div>
           )}
         </Media>
       </>) : (<><p>Audio file not found!</p></>)}
+      {pg ? (<>
+        <button className='player-button' onClick={() => {
+          history.push('/myuploadedaudio')
+        }}>My Uploads</button>
+      </>) : (<>
+        <button className='player-button' onClick={() => {
+          history.push('/audiostore')
+        }}>Audio List</button>
+      </>)}
+
 
       <br />
       <br />
-      {pg?(<>
-      <button onClick={() => {
-        history.push('/myuploadedaudio')
-      }}>My Uploads</button>
-      </>):( <>
-      <button onClick={() => {
-        history.push('/audiostore')
-      }}>Audio List</button>
-      </>)}
-      
-     
-      <br />
-      <br />
-      <button onClick={() => {
+      <button className='player-button' onClick={() => {
         history.push('/dashboard');
       }}>Back to Dashboard</button>
-    </>
+      <br/>
+      <br/>
+    </div>
   );
 }
 
