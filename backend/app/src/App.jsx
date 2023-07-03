@@ -17,6 +17,7 @@ import newSearchCreators from './pages/newSearchCreators';
 import AudioPlayer from './pages/Player'
 import { web3client } from './client-objects/web3client';
 import Following from './pages/Following';
+import LitIntegration from './pages/LitIntegration';
 
 function App() {
   
@@ -28,7 +29,7 @@ function App() {
     <div>
       <Switch>
         <AuthContext.Provider value={{ did, setDid, session, setSession, compose, client, parenId, setParentId, qData, setQData, web3client}}>
-        <Route exact path="/" component={WalletConnect} />
+        <Route exact path="/" component={LitIntegration} />
         <Route path="/mutatedata" component={MutateData} />
         <Route path= "/myuploadedaudio" component= {MyUploadedAudio}/>
         <Route path= "/uploadaudio" component= {UploadAudioFile}/>

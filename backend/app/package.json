@@ -14,6 +14,7 @@
     "@ceramicnetwork/cli": "^2.31.0",
     "@composedb/cli": "^0.4.5",
     "@didtools/pkh-ethereum": "^0.3.0",
+    "@lit-protocol/lit-node-client": "^2.2.26",
     "did-session": "^2.0.1",
     "dotenv": "^16.1.4",
     "graphql": "^16.6.0",
