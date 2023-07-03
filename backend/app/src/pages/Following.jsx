@@ -1,7 +1,6 @@
 import { gql, useQuery } from '@apollo/client'
 import React from 'react'
 import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
-import './Following.css';
 
 const GET_FOLLOWING = gql
   `

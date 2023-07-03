@@ -4,7 +4,6 @@ import { useMutation, gql } from '@apollo/client';
 import { useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { useHistory } from 'react-router-dom';
-import './UploadAudioFile.css'
 
 const CREATE_AUDIO_MUTATION = gql
   `
@@ -43,7 +42,7 @@ function UploadAudioFile() {
   const [showSuccessMessage, setShowSuccessMessage] = useState(false); // Track success message visibility
   const web3client = new Web3Storage({
     token:
-      process.env.WEB3_TOKEN,
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweDBBMjBDZGMwOWI5NjUwRDA3MWE3RWRjMjkwMjlkMDY5NDA2NENlNTQiLCJpc3MiOiJ3ZWIzLXN0b3JhZ2UiLCJpYXQiOjE2ODY2MTk4OTY0NjQsIm5hbWUiOiJBdWRpbyJ9.t3OwHAy0E6oL1LW79nI2foXeh26cLVYytGMhtN_0aJ4',
   });
   const history = useHistory();
 

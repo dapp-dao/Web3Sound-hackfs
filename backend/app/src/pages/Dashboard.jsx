@@ -2,7 +2,6 @@ import { gql, useQuery } from '@apollo/client';
 import React, { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
-import './Dashboard.css';
 
 
 function Dashboard() {
@@ -13,7 +12,6 @@ function Dashboard() {
 
   useEffect(() => {
     if(qData && qData.viewer.user){
-        console.log('qdata= ',qData);
         checkIfCreator();
     }
   }, []);

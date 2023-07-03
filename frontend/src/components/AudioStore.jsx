@@ -1,31 +1,12 @@
-import { useQuery, gql } from '@apollo/client';
+import { useQuery } from '@apollo/client';
 import { useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
-import { Link,useHistory } from 'react-router-dom/cjs/react-router-dom.min';
-
-const GET_AUDIO_FILES_QUERY = gql
-`
-  query audioFiles($first: Int!) {
-    audioIndex(first: $first) {
-      edges {
-        node {
-          id
-          likes
-          audioTrack
-          title
-          creator {
-            id
-          }
-        }
-      }
-    }
-  }
-`;
+import { Link } from 'react-router-dom';
+import TOP_AUDIO_FILES from '../gql-queries/top-audio-files';
 
 function AudioStore() {
   const { client } = useContext(AuthContext);
-  const history= useHistory();
-  const { loading, error, data } = useQuery(GET_AUDIO_FILES_QUERY, {
+  const { loading, error, data } = useQuery(TOP_AUDIO_FILES, {
     client,
     variables: { first: 10 },
   });
@@ -39,7 +20,7 @@ function AudioStore() {
 
   return (
     <>
-      <h1 className='my-audio-title'>All Tracks</h1>
+      <h1>All Tracks</h1>
 
       {sortedAudioFiles.length > 0 ? (
         <ul>
@@ -48,9 +29,9 @@ function AudioStore() {
               return null;
             }
             return(
-            <div className='song-list'>
+            <div>
             <img src='../../public/cover.jpg' alt='Cover' className='song-list-image' />
-            <div className='song-details'>
+            <div>
             <li key={audio.id}>
             <Link to={{ pathname: '/player', state: { audioId: audio.audioTrack, pg: false , name: audio.title} }}>
                   {audio.title}
@@ -64,11 +45,6 @@ function AudioStore() {
       ) : (
         <p>No audio files found.</p>
       )}
-       <button className='my-audio-button' onClick={() => {
-        history.push('/dashboard');
-      }}>Back to Dashboard</button>
-      <br/>
-      <br/>
     </>
   );
 }

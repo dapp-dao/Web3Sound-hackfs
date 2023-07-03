@@ -3,7 +3,6 @@ import { Media, Player, controls, utils } from 'react-media-player';
 import { web3client } from '../client-objects/web3client';
 import { useLocation } from 'react-router-dom';
 import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
-import './Player.css'
 
 function AudioPlayer() {
   const {

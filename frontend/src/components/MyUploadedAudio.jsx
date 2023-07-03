@@ -1,26 +1,9 @@
 import { useQuery, gql } from '@apollo/client';
-import { Link, useHistory } from 'react-router-dom/cjs/react-router-dom.min';
-
-const GET_MY_AUDIO = gql
-  `
-  query{
-    viewer{
-      audioList(first: 10){
-        edges{
-          node{
-            id
-            title
-            audioTrack
-          }
-        }
-      }
-    }
-  }
-`
+import {Link} from 'react-router-dom';
+import MY_AUDIO_FILES from '../gql-queries/my-audio-files';
 
 function MyUploadedAudio() {
-  const history = useHistory();
-  const { loading, error, data } = useQuery(GET_MY_AUDIO);
+  const { loading, error, data } = useQuery(MY_AUDIO_FILES);
 
 
   if (loading) return <p>Loading...</p>;
@@ -29,20 +12,20 @@ function MyUploadedAudio() {
   const audioFiles = data?.viewer?.audioList?.edges || [];
   console.log('audioFiles: ', audioFiles);
   return (
-    <div className='uploaded-audio-main'>
-      <h1 className='my-audio-title'>My Uploads</h1>
+    <div>
+      <h1>My Uploads</h1>
 
       {audioFiles.length > 0 ? (
         <ul>
           {audioFiles.map(({ node: audio }) => {
             if (audio.audioTrack === '') {
-              return null; // Skip rendering if audioTrack is null
+              return null; 
             }
 
             return (
               <div className='song-list' key={audio.id}>
                 <img src='../../public/cover.jpg' alt='Cover' className='song-list-image' />
-                <div className='song-details'>
+                <div>
                   <li>
                     <Link to={{ pathname: '/player', state: { audioId: audio.audioTrack, pg: true, name: audio.title } }}>
                       {audio.title}
@@ -56,16 +39,9 @@ function MyUploadedAudio() {
       ) : (
         <p>No audio files found for the specified creator.</p>
       )}
-      <br />
-      <br />
-      <button className='my-audio-button' onClick={() => {
-        history.push('/dashboard');
-      }}>Back to Dashboard</button>
-      <br />
-      <br />
+
     </div>
   );
 }
 
 export default MyUploadedAudio;
-

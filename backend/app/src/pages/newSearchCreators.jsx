@@ -3,7 +3,6 @@ import { useQuery, gql, useMutation } from '@apollo/client';
 import { useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { useHistory } from 'react-router-dom';
-import './newSearchCreators.css';
 
 const GET_USERS_QUERY = gql
     `

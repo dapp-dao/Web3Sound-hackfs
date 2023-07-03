@@ -1,7 +1,6 @@
 import { gql, useMutation, useQuery } from '@apollo/client';
 import React, { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
-import './MyFollowers.css'
 
 const GET_MY_FOLLOWERS = gql
 `

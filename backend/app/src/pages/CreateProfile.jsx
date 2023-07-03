@@ -3,8 +3,6 @@ import { useMutation, gql } from '@apollo/client';
 import { useContext, useState } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { useHistory } from 'react-router-dom';
-import './CreateProfile.css';
-import './UploadAudioFile.css';
 
 const CREATE_USER_MUTATION = gql
   `
