@@ -12,9 +12,12 @@ const TOP_AUDIO_FILES = gql
           title
           creator {
             id
+             user{
+              name
+             }
+            }
           }
         }
-      }
     }
   }
 `;

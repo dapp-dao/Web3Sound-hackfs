@@ -6,8 +6,10 @@ import { web3client } from './client-objects/web3Client';
 import {BrowserRouter, Routes, Route} from 'react-router-dom';
 import { AuthContext } from './context/AuthContext';
 import WalletConnect from './pages/WalletConnect';
-import AudioStore from './components/AudioStore';
 import AudioPlayer from './components/AudioPlayer';
+import NavBar from './components/NavBar';
+import routes from './config/routes';
+import AudioStorePage from './pages/main/AudioStorePage';
 
 function App() {
   const [did, setDid] = useState(null);
@@ -20,9 +22,9 @@ function App() {
       <BrowserRouter>
         <AuthContext.Provider value={{ did, setDid, session, setSession, compose, client, parenId, setParentId, qData, setQData, web3client}}>
           <Routes>
-            <Route path='/'element={<WalletConnect/>}/>
-            <Route path= '/audiostore' element= {<AudioStore/>}/>
-            <Route path='/audioplayer' element={<AudioPlayer/>}/>
+            <Route path={routes.HOME} element={<WalletConnect/>}/>
+            <Route path= {routes.AUDIOSTORE} element= {<AudioStorePage/>}/>
+            <Route path={routes.PLAYER} element={<AudioPlayer/>}/>
           </Routes>
         </AuthContext.Provider>
       </BrowserRouter>

@@ -11,6 +11,11 @@
   },
   "dependencies": {
     "@apollo/client": "^3.7.15",
+    "@fortawesome/fontawesome-svg-core": "^6.4.0",
+    "@fortawesome/free-brands-svg-icons": "^6.4.0",
+    "@fortawesome/free-regular-svg-icons": "^6.4.0",
+    "@fortawesome/free-solid-svg-icons": "^6.4.0",
+    "@fortawesome/react-fontawesome": "^0.2.0",
     "@ceramicnetwork/cli": "^2.31.0",
     "@composedb/cli": "^0.4.5",
     "@didtools/pkh-ethereum": "^0.3.0",

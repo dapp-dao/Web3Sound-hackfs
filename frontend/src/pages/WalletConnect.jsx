@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { useLazyQuery } from '@apollo/client';
 import { EthereumWebAuth, getAccountId } from '@didtools/pkh-ethereum';
 import CHECK_USER_EXISTS from '../gql-queries/check-user-exists';
+import routes from '../config/routes';
 
 
 function WalletConnect() {
@@ -42,7 +43,7 @@ function WalletConnect() {
     if (queryData && queryData.viewer && queryData.viewer.user) {
       setQData(queryData);
       console.log('data:', queryData);
-      navigate('/audiostore');
+      navigate(routes.AUDIOSTORE);
 
     } else if (didSet) {
       console.log('no data:', queryData);
@@ -75,7 +76,7 @@ function WalletConnect() {
   return (
     <div>
       <h1 >web3Sound</h1>
-      <button onClick={connectWallet}>Connect Wallet</button>
+      <button className='button-class' onClick={connectWallet}>Connect Wallet</button>
     </div>
   );
   
