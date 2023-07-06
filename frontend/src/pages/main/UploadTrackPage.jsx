@@ -1,14 +1,14 @@
 import React from 'react'
 import NavBar from '../../components/NavBar'
-import AudioStore from '../../components/AudioStore'
+import UploadTrack from '../../components/UploadTrack'
 
-function AudioStorePage() {
+function UploadTrackPage() {
   return (
     <div className='main-container'>
         <NavBar/>
-        <AudioStore/>
+        <UploadTrack/>
     </div>
   )
 }
 
-export default AudioStorePage
+export default UploadTrackPage

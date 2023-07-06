@@ -1,10 +1,10 @@
 import { gql } from "@apollo/client";
 
 const MY_AUDIO_FILES = gql
-  `
-  query{
+
+` query{
     viewer{
-      audioList(first: 10){
+      audioList(first: 100){
         edges{
           node{
             id

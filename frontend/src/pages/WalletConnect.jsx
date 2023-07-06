@@ -1,51 +1,29 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { AuthContext } from '../context/AuthContext';
+import React from 'react';
 import { DIDSession } from 'did-session';
 import { useNavigate } from 'react-router-dom';
-import { useLazyQuery } from '@apollo/client';
 import { EthereumWebAuth, getAccountId } from '@didtools/pkh-ethereum';
 import CHECK_USER_EXISTS from '../gql-queries/check-user-exists';
 import routes from '../config/routes';
+import { client } from '../client-objects/apolloClient';
+import { compose } from '../client-objects/composeClient';
+import { useLazyQuery } from '@apollo/client';
 
 
 function WalletConnect() {
-  const { session, setSession, compose, client, setQData } = useContext(AuthContext);
-  const [didSet, setDidSet] = useState(false); // Track if setDID is completed
-  const [executeQuery, { loading, error, data }] = useLazyQuery(CHECK_USER_EXISTS, {
+  const [executeQuery, { loading, error }] = useLazyQuery(CHECK_USER_EXISTS, {
     client,
     fetchPolicy: 'network-only',
     onCompleted: handleQueryCompleted,
   });
   const navigate= useNavigate();
 
-  useEffect(() => {
-    const authSession = async () => {
-      try {
-        if (session && session.did) {
-          await compose.setDID(session.did);
-          console.log(compose);
-          setDidSet(true)
-        }
-      } catch (err) {
-        console.log('Error in setting auth session - ', err);
-      }
-    };
-    authSession();
-  }, [session]);
 
-  useEffect(() => {
-    if (didSet) {
-      executeQuery(); 
-    }
-  }, [didSet, executeQuery]);
+  function handleQueryCompleted(data) {
+    console.log('data: ', data)
+    if (data && data.viewer && data.viewer.user) {
+      navigate(routes.MYUPLOADS);
 
-  function handleQueryCompleted(queryData) {
-    if (queryData && queryData.viewer && queryData.viewer.user) {
-      setQData(queryData);
-      console.log('data:', queryData);
-      navigate(routes.AUDIOSTORE);
-
-    } else if (didSet) {
+    } else  {
       console.log('no data:', queryData);
       navigate('/createprofile');
     }
@@ -58,8 +36,15 @@ function WalletConnect() {
       const accountId = await getAccountId(ethProvider, addresses[0]);
       const authMethod = await EthereumWebAuth.getAuthMethod(ethProvider, accountId);
 
-      const sesh = await DIDSession.authorize(authMethod, { resources: compose.resources });
-      setSession(sesh); 
+      const session = await DIDSession.authorize(authMethod, { resources: compose.resources });
+      
+      if(session){
+        compose.setDID(session.did);
+        console.log('compose client: ',compose.did);
+        if(compose.did){
+          executeQuery();
+        }
+      }
     } catch (error) {
       console.log('Inside connectWallet - ', error);
     }

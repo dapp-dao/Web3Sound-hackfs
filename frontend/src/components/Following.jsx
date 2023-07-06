@@ -1,10 +1,13 @@
-import { useQuery } from '@apollo/client'
-import React from 'react'
+import { useQuery } from '@apollo/client';
+import React from 'react';
 import GET_FOLLOWING from '../gql-queries/get-following';
-
+import profilePic from '../assets/profilepic.png';
+import { client } from '../client-objects/apolloClient';
 
 function Following() {
-  const { loading, error, data } = useQuery(GET_FOLLOWING);
+  const { loading, error, data } = useQuery(GET_FOLLOWING,{
+    client,
+  });
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
@@ -12,24 +15,23 @@ function Following() {
   const following = data?.viewer?.followList?.edges || [];
 
   return (
-    <div className='following-main'>
-      <h1 className='following-title'>Following</h1>
+    <div>
+      <h1>Following</h1>
       {following.length > 0 ? (
-        <ul>
+        <div>
           {following.map(({ node }, index) => (
-            <div className='following-list'>
-              <img src='../../public/profilepic.png' alt='profile' className='following-list-image' />
-              <div className='following-details'>
-                <li key={index}>
-                  <span className="name">{node.following.user.name}</span>
+            <div key={index} className='list-element'>
+              <img src={profilePic} alt="profile" height={"60px"}/>
+              <div>
+                <p>
+                  <span>{node.following.user.name}</span>
                   <br />
-                  <span className="id">{node.following.id}</span>
-                </li>
-
+                  <span>{node.following.id}</span>
+                </p>
               </div>
             </div>
           ))}
-        </ul>
+        </div>
       ) : (
         <p>0 following.</p>
       )}
@@ -37,4 +39,4 @@ function Following() {
   );
 }
 
-export default Following
+export default Following;

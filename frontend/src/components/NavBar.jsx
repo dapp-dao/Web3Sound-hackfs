@@ -2,9 +2,12 @@ import React, { useState, useContext } from "react";
 import { useEffect } from "react";
 import logo from "../assets/cropped-logo.png";
 import LikeButton from "./common/LikeButton";
+import routes from "../config/routes";
+import { useNavigate } from "react-router-dom";
 
 function NavBar() {
   const [isCreator, setIsCreator] = useState(true);
+  const navigate= useNavigate();
 
 
   // useEffect(()=>{
@@ -24,15 +27,23 @@ function NavBar() {
         <span className="logo-text">Web3Sound.</span>
         </div>
       <div className="navbar-elements">
-      <a href="/">Top Songs</a>
+      <p onClick={()=>{
+        navigate(routes.TOPSONGS)
+      }}>Top Songs</p>
       {isCreator && (
         <div className="navbar-elements">
-          <a href="/">My Uploads</a>
-          <a href="/">Following</a>
+          <p onClick={()=>{
+            navigate(routes.MYUPLOADS)
+          }}>My Uploads</p>
+          <p onClick={()=>{
+            navigate(routes.FOLLOWING)
+          }}>Following</p>
         </div>
       )}
       <a href="/">Followers</a>
-      <a href="/">Upload Track</a>
+      <p onClick={()=>{
+        navigate(routes.UPLOADTRACK);
+      }}>Upload Track</p>
       <a href="/">Follow More</a>
       </div>
         <button className="button-class">Logout</button>

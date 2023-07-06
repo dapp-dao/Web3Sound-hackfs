@@ -1,15 +1,13 @@
 import { useQuery } from "@apollo/client";
-import { useContext } from "react";
-import { AuthContext } from "../context/AuthContext";
 import { Link } from "react-router-dom";
 import TOP_AUDIO_FILES from "../gql-queries/top-audio-files";
 import routes from "../config/routes";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
-import albumCover from "../assets/album-cover.jpg"
+import albumCover from "../assets/album-cover.jpg";
+import { client } from "../client-objects/apolloClient";
 
-function AudioStore() {
-  const { client } = useContext(AuthContext);
+function TopSongs() {
   const { loading, error, data } = useQuery(TOP_AUDIO_FILES, {
     client,
     variables: { first: 10 },
@@ -29,19 +27,20 @@ function AudioStore() {
       <h1>Top Tracks</h1>
 
       {sortedAudioFiles.length > 0 ? (
-        <ul>
+        <div>
           {sortedAudioFiles.map(({ node: audio }) => {
             if (audio.audioTrack === "") {
               return null;
             }
             return (
-              < div className="audio-list-element">
-                <img 
-                src={albumCover}
-                alt="Cover"
-                 />
+              <div key={audio.audioTrack} className="list-element">
+                <img
+                  src={albumCover}
+                  alt="Cover"
+                  height={"100px"}
+                />
                 <div>
-                  <li key={audio.id}>
+                  <li>
                     <Link
                       to={{
                         pathname: routes.PLAYER,
@@ -54,24 +53,26 @@ function AudioStore() {
                     >
                       {audio.title}
                     </Link>
-                    <span>{audio.likes} 
-                      <FontAwesomeIcon icon={faHeart} size="lg" color="#fb5789"/>
+                    <span>
+                      {audio.likes}{" "}
+                      <FontAwesomeIcon
+                        icon={faHeart}
+                        size="lg"
+                        color="#fb5789"
+                      />
                     </span>
-                    <Link>
-                      {audio.creator.user.name}
-                    </Link>
+                    <Link>{audio.creator.user.name}</Link>
                   </li>
                 </div>
               </div>
             );
           })}
-        </ul>
+        </div>
       ) : (
         <p>No audio files found.</p>
       )}
     </div>
-   
   );
 }
 
-export default AudioStore;
+export default TopSongs;
