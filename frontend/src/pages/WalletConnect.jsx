@@ -7,6 +7,7 @@ import routes from '../config/routes';
 import { client } from '../client-objects/apolloClient';
 import { compose } from '../client-objects/composeClient';
 import { useLazyQuery } from '@apollo/client';
+import litClient from '../client-objects/litClient';
 
 
 function WalletConnect() {
@@ -20,6 +21,7 @@ function WalletConnect() {
 
   function handleQueryCompleted(data) {
     console.log('data: ', data)
+    console.log('lit: ', litClient);
     if (data && data.viewer && data.viewer.user) {
       navigate(routes.MYUPLOADS);
 
