@@ -1,9 +1,9 @@
 import { useQuery } from "@apollo/client";
 import { Link } from "react-router-dom";
-import MY_AUDIO_FILES from "../gql-queries/my-audio-files";
-import routes from "../config/routes";
-import albumCover from "../assets/album-cover.jpg"
-import { client } from "../client-objects/apolloClient";
+import MY_AUDIO_FILES from "../../gql-queries/my-audio-files";
+import routes from "../../config/routes";
+import albumCover from "../../assets/album-cover.jpg"
+import { client } from "../../client-objects/apolloClient";
 
 
 function MyUploads() {
@@ -24,13 +24,13 @@ function MyUploads() {
     <div>
       <h1>My Uploads</h1>
 
-      {audioFiles.map(({ node: audio }) => {
-        if (audio.audioTrack === "") {
-          return null;
-        }
+      {audioFiles.map(({ node: audio }, index) => {
+        // if (audio.audioTrack === "") {
+        //   return null;
+        // } 
 
         return (
-          <div key={audio.audioTrack} className="list-element">
+          <div key={index} className="list-element">
             <img src={albumCover} alt="Cover" height={"100px"} className="image" />
             <div>
               <Link

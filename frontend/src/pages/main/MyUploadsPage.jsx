@@ -1,6 +1,6 @@
 import React from 'react'
-import NavBar from '../../components/NavBar'
-import MyUploads from '../../components/MyUploads'
+import NavBar from '../../components/main/NavBar'
+import MyUploads from '../../components/main/MyUploads'
 
 function MyUploadsPage() {
   return (

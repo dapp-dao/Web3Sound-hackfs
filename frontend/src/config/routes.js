@@ -4,7 +4,8 @@ const urls={
     MYUPLOADS: '/myuploads',
     PLAYER: '/player',
     FOLLOWING: '/following',
-    UPLOADTRACK: '/uploadtrack'
+    UPLOADTRACK: '/uploadtrack',
+    FOLLOWMORE: '/followmore',
 };
 
 const routes={
@@ -14,6 +15,7 @@ const routes={
     PLAYER: urls.PLAYER,
     FOLLOWING: urls.FOLLOWING,
     UPLOADTRACK: urls.UPLOADTRACK,
+    FOLLOWMORE: urls.FOLLOWMORE,
 };
 
 export default routes;

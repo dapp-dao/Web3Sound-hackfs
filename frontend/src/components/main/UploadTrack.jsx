@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 import { Web3Storage } from 'web3.storage';
 import { useMutation, useQuery } from '@apollo/client';
-import CREATE_AUDIO_MUTATION from '../gql-mutations/create-audio';
-import UPDATE_TO_CREATOR from '../gql-mutations/update-to-creator';
-import { client } from '../client-objects/apolloClient';
-import { compose } from '../client-objects/composeClient';
-import CHECK_USER_EXISTS from '../gql-queries/check-user-exists'
+import CREATE_AUDIO_MUTATION from '../../gql-mutations/create-audio';
+import UPDATE_TO_CREATOR from '../../gql-mutations/update-to-creator';
+import { client } from '../../client-objects/apolloClient';
+import CHECK_USER_EXISTS from '../../gql-queries/check-user-exists'
 
 function UploadTrack() {
   const [title, setTitle] = useState('');
@@ -57,8 +56,7 @@ function UploadTrack() {
   
         if (data.createaudio) {
           setShowSuccessMessage(true);
-          console.log('creator: ',compose);
-          if (userData.viewer.user.creator) {
+          if (!userData.viewer.user.creator) {
             handleUpdateUser();
           }
          }

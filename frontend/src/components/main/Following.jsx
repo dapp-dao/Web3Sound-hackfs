@@ -1,8 +1,8 @@
 import { useQuery } from '@apollo/client';
 import React from 'react';
-import GET_FOLLOWING from '../gql-queries/get-following';
-import profilePic from '../assets/profilepic.png';
-import { client } from '../client-objects/apolloClient';
+import GET_FOLLOWING from '../../gql-queries/get-following';
+import profilePic from '../../assets/profilepic.png';
+import { client } from '../../client-objects/apolloClient';
 
 function Following() {
   const { loading, error, data } = useQuery(GET_FOLLOWING,{

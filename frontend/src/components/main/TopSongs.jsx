@@ -1,16 +1,16 @@
 import { useQuery } from "@apollo/client";
 import { Link } from "react-router-dom";
-import TOP_AUDIO_FILES from "../gql-queries/top-audio-files";
-import routes from "../config/routes";
+import TOP_AUDIO_FILES from "../../gql-queries/top-audio-files";
+import routes from "../../config/routes";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
-import albumCover from "../assets/album-cover.jpg";
-import { client } from "../client-objects/apolloClient";
+import albumCover from "../../assets/album-cover.jpg";
+import { client } from "../../client-objects/apolloClient";
 
 function TopSongs() {
   const { loading, error, data } = useQuery(TOP_AUDIO_FILES, {
     client,
-    variables: { first: 10 },
+    variables: { first: 100 },
   });
 
   if (loading) return <p>Loading...</p>;
@@ -28,12 +28,12 @@ function TopSongs() {
 
       {sortedAudioFiles.length > 0 ? (
         <div>
-          {sortedAudioFiles.map(({ node: audio }) => {
-            if (audio.audioTrack === "") {
-              return null;
-            }
+          {sortedAudioFiles.map(({ node: audio }, index) => {
+            // if (audio.audioTrack === "") {
+            //   return null;
+            // }
             return (
-              <div key={audio.audioTrack} className="list-element">
+              <div key={index} className="list-element">
                 <img
                   src={albumCover}
                   alt="Cover"

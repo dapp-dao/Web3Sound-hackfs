@@ -8,6 +8,7 @@ query {
       id
       user {
         id
+        name
         creator
       }
     }

@@ -1,6 +1,6 @@
 import React from 'react'
-import NavBar from '../../components/NavBar'
-import UploadTrack from '../../components/UploadTrack'
+import NavBar from '../../components/main/NavBar'
+import UploadTrack from '../../components/main/UploadTrack'
 
 function UploadTrackPage() {
   return (

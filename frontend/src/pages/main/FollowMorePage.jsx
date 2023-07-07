@@ -1,14 +1,14 @@
 import React from 'react'
 import NavBar from '../../components/main/NavBar'
-import TopSongs from '../../components/main/TopSongs'
+import FollowMore from '../../components/main/FollowMore'
 
-function TopSongsPage() {
+function FollowMorePage() {
   return (
     <div className='main-container'>
         <NavBar/>
-        <TopSongs/>
+        <FollowMore/>
     </div>
   )
 }
 
-export default TopSongsPage
+export default FollowMorePage
