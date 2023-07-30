@@ -1,0 +1,7 @@
+type LikeAudio @loadModel(id: "kjzl6hvfrbw6c9iy4fidutlrlvxjyitc94jex3zf5ua08iqao5xop7ea9iphaq7"){
+    id: ID!
+}
+
+type Audio @loadModel(id: "kjzl6hvfrbw6c50tlukwnjvr4dekfh1wdttx3za0uedgjp804o3dt6xknf2vq5c"){
+    likes: [LikeAudio] @relationFrom(model: "LikeAudio", property: "audioID")
+}

@@ -50,7 +50,9 @@ function NavBar() {
             </p>
           </div>
         )}
-        <a href="/">Followers</a>
+        <p  onClick={() => {
+                navigate(routes.FOLLOWERS);
+              }}>Followers</p>
         <p
           onClick={() => {
             navigate(routes.UPLOADTRACK);

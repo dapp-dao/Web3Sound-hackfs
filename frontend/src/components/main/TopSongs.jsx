@@ -17,10 +17,12 @@ function TopSongs() {
   if (error) return <p>Error: {error.message}</p>;
 
   const audioFiles = data?.audioIndex?.edges || [];
+  const sortedAudioFiles= audioFiles.filter((audio)=>audio.node.deleted===false);
   console.log('audiofiles= ', audioFiles);
-  const sortedAudioFiles = audioFiles.sort(
-    (a, b) => b.node.likes - a.node.likes
-  );
+  console.log('filtered audio files= ', sortedAudioFiles);
+  // const sortedAudioFiles = filteredAudioFiles.sort(
+  //   (a, b) => b.node.likes - a.node.likes
+  // );
 
   return (
     <div>
@@ -54,7 +56,7 @@ function TopSongs() {
                       {audio.title}
                     </Link>
                     <span>
-                      {audio.likes}{" "}
+                      {/* {audio.likes}{" "} */}
                       <FontAwesomeIcon
                         icon={faHeart}
                         size="lg"

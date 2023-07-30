@@ -10,6 +10,7 @@ const MY_AUDIO_FILES = gql
             id
             title
             audioTrack
+            deleted
           }
         }
       }

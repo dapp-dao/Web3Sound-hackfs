@@ -15,8 +15,9 @@ function MyUploads() {
   if (error) return <p>Error: {error.message}</p>;
 
   const audioFiles = data?.viewer?.audioList?.edges || [];
+  const sortedAudioFiles= audioFiles.filter((audio)=>audio.node.deleted===false)
   console.log('audiofiles= ',audioFiles);
-  if (audioFiles.length === 0) {
+  if (sortedAudioFiles.length === 0) {
     return <p >No audio files found for the specified creator.</p>;
   }
 
@@ -24,7 +25,7 @@ function MyUploads() {
     <div>
       <h1>My Uploads</h1>
 
-      {audioFiles.map(({ node: audio }, index) => {
+      {sortedAudioFiles.map(({ node: audio }, index) => {
         // if (audio.audioTrack === "") {
         //   return null;
         // } 

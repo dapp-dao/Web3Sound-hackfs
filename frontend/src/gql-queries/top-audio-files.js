@@ -7,9 +7,9 @@ const TOP_AUDIO_FILES = gql
       edges {
         node {
           id
-          likes
           audioTrack
           title
+          deleted
           creator {
             id
              user{

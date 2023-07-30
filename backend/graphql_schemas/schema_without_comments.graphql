@@ -1,27 +1,11 @@
 type Query {
-  node(
-    id: ID!
-  ): Node
-
+  node(id: ID!): Node
   viewer: CeramicAccount
-  followIndex(
-    after: String
-    first: Int
-    before: String
-    last: Int
-  ): FollowConnection
-  audioIndex(
-    after: String
-    first: Int
-    before: String
-    last: Int
-  ): audioConnection
-  userIndex(
-    after: String
-    first: Int
-    before: String
-    last: Int
-  ): UserConnection
+  userIndex(after: String, first: Int, before: String, last: Int): UserConnection
+  audioIndex(after: String, first: Int, before: String, last: Int): AudioConnection
+  followIndex(after: String, first: Int, before: String, last: Int): FollowConnection
+  likeIndex(after: String, first: Int, before: String, last: Int): LikeConnection
+  likeAudioIndex(after: String, first: Int, before: String, last: Int): LikeAudioConnection
 }
 
 interface Node {
@@ -31,62 +15,11 @@ interface Node {
 type CeramicAccount implements Node {
   id: ID!
   isViewer: Boolean!
-  followList(
-    after: String
-    first: Int
-    before: String
-    last: Int
-  ): FollowConnection
-  audioList(
-    after: String
-    first: Int
-    before: String
-    last: Int
-  ): audioConnection
   user: User
-}
-
-type FollowConnection {
-  pageInfo: PageInfo!
-  edges: [FollowEdge]
-}
-
-type PageInfo {
-  hasNextPage: Boolean!
-  hasPreviousPage: Boolean!
-  startCursor: String
-  endCursor: String
-}
-
-type FollowEdge {
-  node: Follow
-  cursor: String!
-}
-
-type Follow implements Node {
-  id: ID!
-  following: CeramicAccount!
-  follower: CeramicAccount!
-}
-
-type audioConnection {
-  pageInfo: PageInfo!
-  edges: [audioEdge]
-}
-
-type audioEdge {
-  node: audio
-  cursor: String!
-}
-
-type audio implements Node {
-  id: ID!
-  likes: Int
-  title: String!
-  public: Boolean!
-  audioImage: String!
-  audioTrack: String!
-  creator: CeramicAccount!
+  audioList(after: String, first: Int, before: String, last: Int): AudioConnection
+  followList(after: String, first: Int, before: String, last: Int): FollowConnection
+  likeList(after: String, first: Int, before: String, last: Int): LikeConnection
+  likeAudioList(after: String, first: Int, before: String, last: Int): LikeAudioConnection
 }
 
 type User implements Node {
@@ -96,6 +29,87 @@ type User implements Node {
   followers: Int
   did: CeramicAccount!
 }
+
+type AudioConnection {
+  pageInfo: PageInfo!
+  edges: [AudioEdge]
+}
+
+type PageInfo {
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: String
+  endCursor: String
+}
+
+type AudioEdge {
+  node: Audio
+  cursor: String!
+}
+
+type Audio implements Node {
+  id: ID!
+  likes(after: String, first: Int, before: String, last: Int, account: ID): LikeConnection!
+  title: String!
+  public: Boolean!
+  deleted: Boolean!
+  audioImage: String!
+  audioTrack: String!
+  creator: CeramicAccount!
+}
+
+type LikeConnection {
+  pageInfo: PageInfo!
+  edges: [LikeEdge]
+}
+
+type LikeEdge {
+  node: Like
+  cursor: String!
+}
+
+type Like implements Node {
+  id: ID!
+  liker: CeramicAccount!
+  status: Boolean!
+}
+
+type FollowConnection {
+  pageInfo: PageInfo!
+  edges: [FollowEdge]
+}
+
+type FollowEdge {
+  node: Follow
+  cursor: String!
+}
+
+type Follow implements Node {
+  id: ID!
+  status: Boolean!
+  following: CeramicAccount!
+  follower: CeramicAccount!
+}
+
+type LikeAudioConnection {
+  pageInfo: PageInfo!
+  edges: [LikeAudioEdge]
+}
+
+type LikeAudioEdge {
+  node: LikeAudio
+  cursor: String!
+}
+
+type LikeAudio implements Node {
+  id: ID!
+  likeID: CeramicStreamID!
+  audioID: CeramicStreamID!
+  like: Like
+  audio: Audio
+}
+
+scalar CeramicStreamID
 
 type UserConnection {
   pageInfo: PageInfo!
@@ -108,116 +122,20 @@ type UserEdge {
 }
 
 type Mutation {
-  createFollow(input: CreateFollowInput!): CreateFollowPayload
-  updateFollow(input: UpdateFollowInput!): UpdateFollowPayload
-  createaudio(input: CreateaudioInput!): CreateaudioPayload
-  updateaudio(input: UpdateaudioInput!): UpdateaudioPayload
   createUser(input: CreateUserInput!): CreateUserPayload
   updateUser(input: UpdateUserInput!): UpdateUserPayload
-}
-
-type CreateFollowPayload {
-  node(
-    id: ID!
-  ): Node
-
-  viewer: CeramicAccount
-  document: Follow!
-  clientMutationId: String
-}
-
-input CreateFollowInput {
-  content: FollowInput!
-  clientMutationId: String
-}
-
-input FollowInput {
-  following: DID!
-}
-
-scalar DID @specifiedBy(url: "https://www.w3.org/TR/did-core/")
-
-type UpdateFollowPayload {
-  node(
-    id: ID!
-  ): Node
-
-  viewer: CeramicAccount
-  document: Follow!
-  clientMutationId: String
-}
-
-input UpdateFollowInput {
-  id: ID!
-  content: PartialFollowInput!
-  options: UpdateOptionsInput
-  clientMutationId: String
-}
-
-input PartialFollowInput {
-  following: DID
-}
-
-input UpdateOptionsInput {
-  replace: Boolean = false
-  version: CeramicCommitID
-}
-
-scalar CeramicCommitID @specifiedBy(url: "https://github.com/ceramicnetwork/CIP/blob/main/CIPs/CIP-59/CIP-59.md#commitid")
-
-type CreateaudioPayload {
-  node(
-    id: ID!
-  ): Node
-
-  viewer: CeramicAccount
-  document: audio!
-  clientMutationId: String
-}
-
-input CreateaudioInput {
-  content: audioInput!
-  clientMutationId: String
-}
-
-input audioInput {
-  likes: Int
-  title: String!
-  public: Boolean!
-  audioImage: String!
-  audioTrack: String!
-}
-
-type UpdateaudioPayload {
-  node(
-    id: ID!
-  ): Node
-
-  viewer: CeramicAccount
-  document: audio!
-  clientMutationId: String
-}
-
-input UpdateaudioInput {
-  id: ID!
-  content: PartialaudioInput!
-  options: UpdateOptionsInput
-  clientMutationId: String
-}
-
-input PartialaudioInput {
-  likes: Int
-  title: String
-  public: Boolean
-  audioImage: String
-  audioTrack: String
+  createAudio(input: CreateAudioInput!): CreateAudioPayload
+  updateAudio(input: UpdateAudioInput!): UpdateAudioPayload
+  createFollow(input: CreateFollowInput!): CreateFollowPayload
+  updateFollow(input: UpdateFollowInput!): UpdateFollowPayload
+  createLike(input: CreateLikeInput!): CreateLikePayload
+  updateLike(input: UpdateLikeInput!): UpdateLikePayload
+  createLikeAudio(input: CreateLikeAudioInput!): CreateLikeAudioPayload
+  updateLikeAudio(input: UpdateLikeAudioInput!): UpdateLikeAudioPayload
 }
 
 type CreateUserPayload {
-  node(
-    id: ID!
-  ): Node
-
+  node(id: ID!): Node
   viewer: CeramicAccount
   document: User!
   clientMutationId: String
@@ -235,10 +153,7 @@ input UserInput {
 }
 
 type UpdateUserPayload {
-  node(
-    id: ID!
-  ): Node
-
+  node(id: ID!): Node
   viewer: CeramicAccount
   document: User!
   clientMutationId: String
@@ -255,4 +170,163 @@ input PartialUserInput {
   name: String
   creator: Boolean
   followers: Int
+}
+
+input UpdateOptionsInput {
+  replace: Boolean = false
+  version: CeramicCommitID
+}
+
+scalar CeramicCommitID
+
+type CreateAudioPayload {
+  node(id: ID!): Node
+  viewer: CeramicAccount
+  document: Audio!
+  clientMutationId: String
+}
+
+input CreateAudioInput {
+  content: AudioInput!
+  clientMutationId: String
+}
+
+input AudioInput {
+  title: String!
+  public: Boolean!
+  deleted: Boolean!
+  audioImage: String!
+  audioTrack: String!
+}
+
+type UpdateAudioPayload {
+  node(id: ID!): Node
+  viewer: CeramicAccount
+  document: Audio!
+  clientMutationId: String
+}
+
+input UpdateAudioInput {
+  id: ID!
+  content: PartialAudioInput!
+  options: UpdateOptionsInput
+  clientMutationId: String
+}
+
+input PartialAudioInput {
+  title: String
+  public: Boolean
+  deleted: Boolean
+  audioImage: String
+  audioTrack: String
+}
+
+type CreateFollowPayload {
+  node(id: ID!): Node
+  viewer: CeramicAccount
+  document: Follow!
+  clientMutationId: String
+}
+
+input CreateFollowInput {
+  content: FollowInput!
+  clientMutationId: String
+}
+
+input FollowInput {
+  status: Boolean!
+  following: DID!
+}
+
+scalar DID
+
+type UpdateFollowPayload {
+  node(id: ID!): Node
+  viewer: CeramicAccount
+  document: Follow!
+  clientMutationId: String
+}
+
+input UpdateFollowInput {
+  id: ID!
+  content: PartialFollowInput!
+  options: UpdateOptionsInput
+  clientMutationId: String
+}
+
+input PartialFollowInput {
+  status: Boolean
+  following: DID
+}
+
+type CreateLikePayload {
+  node(id: ID!): Node
+  viewer: CeramicAccount
+  document: Like!
+  clientMutationId: String
+}
+
+input CreateLikeInput {
+  content: LikeInput!
+  clientMutationId: String
+}
+
+input LikeInput {
+  liker: DID!
+  status: Boolean!
+}
+
+type UpdateLikePayload {
+  node(id: ID!): Node
+  viewer: CeramicAccount
+  document: Like!
+  clientMutationId: String
+}
+
+input UpdateLikeInput {
+  id: ID!
+  content: PartialLikeInput!
+  options: UpdateOptionsInput
+  clientMutationId: String
+}
+
+input PartialLikeInput {
+  liker: DID
+  status: Boolean
+}
+
+type CreateLikeAudioPayload {
+  node(id: ID!): Node
+  viewer: CeramicAccount
+  document: LikeAudio!
+  clientMutationId: String
+}
+
+input CreateLikeAudioInput {
+  content: LikeAudioInput!
+  clientMutationId: String
+}
+
+input LikeAudioInput {
+  likeID: CeramicStreamID!
+  audioID: CeramicStreamID!
+}
+
+type UpdateLikeAudioPayload {
+  node(id: ID!): Node
+  viewer: CeramicAccount
+  document: LikeAudio!
+  clientMutationId: String
+}
+
+input UpdateLikeAudioInput {
+  id: ID!
+  content: PartialLikeAudioInput!
+  options: UpdateOptionsInput
+  clientMutationId: String
+}
+
+input PartialLikeAudioInput {
+  likeID: CeramicStreamID
+  audioID: CeramicStreamID
 }

@@ -48,13 +48,13 @@ function UploadTrack() {
                 audioTrack: cidReturned,
                 audioImage: 'bafybeiesvihx7glvmgcltfehkp5bevz6yxibyl5g2o5doja4oxdxg6ctma',
                 public: true,
-                likes: 0,
+                deleted: false,
               },
             },
           },
         });
   
-        if (data.createaudio) {
+        if (data.createAudio) {
           setShowSuccessMessage(true);
           if (!userData.viewer.user.creator) {
             handleUpdateUser();

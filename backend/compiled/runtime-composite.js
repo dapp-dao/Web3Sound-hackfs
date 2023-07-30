@@ -1,2 +1,92 @@
 // This is an auto-generated file, do not edit manually
-export const definition = {"models":{"Follow":{"id":"kjzl6hvfrbw6c8t2a0kb8vywq5x0vxdpbhgmp71o7mea4ned699si0vvk0d6ad9","accountRelation":{"type":"list"}},"audio":{"id":"kjzl6hvfrbw6caiz3yypuarsfm3zrnv6y9dvpzdh076lud1wo8qixt9y7x8d891","accountRelation":{"type":"list"}},"User":{"id":"kjzl6hvfrbw6caeox7aondvgjzw06k3itg51oqpxvgzvsydzurl0uowr1j8qoiu","accountRelation":{"type":"single"}}},"objects":{"Follow":{"following":{"type":"did","required":true},"follower":{"type":"view","viewType":"documentAccount"}},"audio":{"likes":{"type":"integer","required":false},"title":{"type":"string","required":true},"public":{"type":"boolean","required":true},"audioImage":{"type":"string","required":true},"audioTrack":{"type":"string","required":true},"creator":{"type":"view","viewType":"documentAccount"}},"User":{"name":{"type":"string","required":true},"creator":{"type":"boolean","required":true},"followers":{"type":"integer","required":false},"did":{"type":"view","viewType":"documentAccount"}}},"enums":{},"accountData":{"followList":{"type":"connection","name":"Follow"},"audioList":{"type":"connection","name":"audio"},"user":{"type":"node","name":"User"}}}
+export const definition = {
+  models: {
+    User: {
+      id: "kjzl6hvfrbw6caeox7aondvgjzw06k3itg51oqpxvgzvsydzurl0uowr1j8qoiu",
+      accountRelation: { type: "single" },
+    },
+    Audio: {
+      id: "kjzl6hvfrbw6c50tlukwnjvr4dekfh1wdttx3za0uedgjp804o3dt6xknf2vq5c",
+      accountRelation: { type: "list" },
+    },
+    Follow: {
+      id: "kjzl6hvfrbw6c807tjavpq7yz34f793d1xtz8i8uyfbzlachikkauk65hc71h5j",
+      accountRelation: { type: "list" },
+    },
+    Like: {
+      id: "kjzl6hvfrbw6c9iy4fidutlrlvxjyitc94jex3zf5ua08iqao5xop7ea9iphaq7",
+      accountRelation: { type: "list" },
+    },
+    LikeAudio: {
+      id: "kjzl6hvfrbw6c9sazqxg93gq13fyzmgplwq443viqepy7n2b0nm9mvrtni45vbn",
+      accountRelation: { type: "list" },
+    },
+  },
+  objects: {
+    User: {
+      name: { type: "string", required: true },
+      creator: { type: "boolean", required: true },
+      followers: { type: "integer", required: false },
+      did: { type: "view", viewType: "documentAccount" },
+    },
+    Audio: {
+      likes: {
+        type: "view",
+        viewType: "relation",
+        relation: {
+          source: "queryConnection",
+          model:
+            "kjzl6hvfrbw6c9iy4fidutlrlvxjyitc94jex3zf5ua08iqao5xop7ea9iphaq7",
+          property: "audioID",
+        },
+      },
+      title: { type: "string", required: true },
+      public: { type: "boolean", required: true },
+      deleted: { type: "boolean", required: true },
+      audioImage: { type: "string", required: true },
+      audioTrack: { type: "string", required: true },
+      creator: { type: "view", viewType: "documentAccount" },
+    },
+    Follow: {
+      status: { type: "boolean", required: true },
+      following: { type: "did", required: true },
+      follower: { type: "view", viewType: "documentAccount" },
+    },
+    Like: {
+      liker: { type: "did", required: true },
+      status: { type: "boolean", required: true },
+    },
+    LikeAudio: {
+      likeID: { type: "streamid", required: true },
+      audioID: { type: "streamid", required: true },
+      like: {
+        type: "view",
+        viewType: "relation",
+        relation: {
+          source: "document",
+          model:
+            "kjzl6hvfrbw6c9iy4fidutlrlvxjyitc94jex3zf5ua08iqao5xop7ea9iphaq7",
+          property: "likeID",
+        },
+      },
+      audio: {
+        type: "view",
+        viewType: "relation",
+        relation: {
+          source: "document",
+          model:
+            "kjzl6hvfrbw6c50tlukwnjvr4dekfh1wdttx3za0uedgjp804o3dt6xknf2vq5c",
+          property: "audioID",
+        },
+      },
+    },
+  },
+  enums: {},
+  accountData: {
+    user: { type: "node", name: "User" },
+    audioList: { type: "connection", name: "Audio" },
+    followList: { type: "connection", name: "Follow" },
+    likeList: { type: "connection", name: "Like" },
+    likeAudioList: { type: "connection", name: "LikeAudio" },
+  },
+};

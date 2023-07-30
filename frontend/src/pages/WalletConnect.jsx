@@ -1,4 +1,3 @@
-import React from 'react';
 import { DIDSession } from 'did-session';
 import { useNavigate } from 'react-router-dom';
 import { EthereumWebAuth, getAccountId } from '@didtools/pkh-ethereum';
@@ -7,7 +6,6 @@ import routes from '../config/routes';
 import { client } from '../client-objects/apolloClient';
 import { compose } from '../client-objects/composeClient';
 import { useLazyQuery } from '@apollo/client';
-import litClient from '../client-objects/litClient';
 
 
 function WalletConnect() {
@@ -21,12 +19,11 @@ function WalletConnect() {
 
   function handleQueryCompleted(data) {
     console.log('data: ', data)
-    console.log('lit: ', litClient);
     if (data && data.viewer && data.viewer.user) {
-      navigate(routes.MYUPLOADS);
+      navigate(routes.TOPSONGS);
 
     } else  {
-      console.log('no data:', queryData);
+      console.log('no data:', data);
       navigate('/createprofile');
     }
   }

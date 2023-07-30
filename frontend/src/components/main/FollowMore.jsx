@@ -37,6 +37,7 @@ function FollowMore() {
           input: {
             content: {
               following: userDid,
+              status: true,
             },
           },
         },

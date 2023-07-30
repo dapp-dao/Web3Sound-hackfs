@@ -1,0 +1,5 @@
+type Like @createModel (accountRelation: LIST, description: "liked audio")
+{
+    liker: DID! @accountReference
+    status: Boolean!
+}

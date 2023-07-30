@@ -1,0 +1,15 @@
+type Like @loadModel(id: "kjzl6hvfrbw6c9iy4fidutlrlvxjyitc94jex3zf5ua08iqao5xop7ea9iphaq7")
+{
+    id: ID!
+}
+
+type Audio @loadModel(id: "kjzl6hvfrbw6c50tlukwnjvr4dekfh1wdttx3za0uedgjp804o3dt6xknf2vq5c"){
+    id: ID!
+}
+
+type LikeAudio @createModel(accountRelation: LIST, description: "Relate a like to audio file"){
+    likeID: StreamID! @documentReference(model: "Like")
+    like: Like! @relationDocument(property: "likeID")
+    audioID: StreamID! @documentReference(model: "Audio")
+    audio: Audio! @relationDocument(property: "audioID")
+}

@@ -1,0 +1,9 @@
+type Audio @createModel(accountRelation: LIST, description: "Audio metadata"){
+    creator: DID! @documentAccount
+    title: String! @string(minLength: 2, maxLength: 50)
+    audioTrack: String! @string(minLength: 0, maxLength: 200)
+    audioImage: String! @string(minLength: 0, maxLength: 200)
+    public: Boolean!
+    deleted: Boolean!
+    likes: Int
+}

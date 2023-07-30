@@ -2,16 +2,12 @@ import { gql } from "@apollo/client";
 
 const CREATE_AUDIO_MUTATION = gql
   `
-  mutation CreateAudio($input: CreateaudioInput!) {
-    createaudio(input: $input) {
+  mutation CreateAudio($input: CreateAudioInput!) {
+    createAudio(input: $input) {
       document {
-        likes
-        public
         title
         audioTrack
-        audioImage
       }
-      clientMutationId
     }
   }
 `;

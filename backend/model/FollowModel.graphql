@@ -1,0 +1,5 @@
+type Follow @createModel(accountRelation: LIST, description: "Follow details"){
+    follower: DID! @documentAccount
+    following: DID! @accountReference
+    status: Boolean!
+}

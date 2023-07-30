@@ -7,32 +7,6 @@ type Query {
 
   """Account currently authenticated on the Ceramic instance, if set"""
   viewer: CeramicAccount
-  followIndex(
-    """Returns the items in the list that come after the specified cursor."""
-    after: String
-
-    """Returns the first n items from the list."""
-    first: Int
-
-    """Returns the items in the list that come before the specified cursor."""
-    before: String
-
-    """Returns the last n items from the list."""
-    last: Int
-  ): FollowConnection
-  audioIndex(
-    """Returns the items in the list that come after the specified cursor."""
-    after: String
-
-    """Returns the first n items from the list."""
-    first: Int
-
-    """Returns the items in the list that come before the specified cursor."""
-    before: String
-
-    """Returns the last n items from the list."""
-    last: Int
-  ): audioConnection
   userIndex(
     """Returns the items in the list that come after the specified cursor."""
     after: String
@@ -46,6 +20,58 @@ type Query {
     """Returns the last n items from the list."""
     last: Int
   ): UserConnection
+  audioIndex(
+    """Returns the items in the list that come after the specified cursor."""
+    after: String
+
+    """Returns the first n items from the list."""
+    first: Int
+
+    """Returns the items in the list that come before the specified cursor."""
+    before: String
+
+    """Returns the last n items from the list."""
+    last: Int
+  ): AudioConnection
+  followIndex(
+    """Returns the items in the list that come after the specified cursor."""
+    after: String
+
+    """Returns the first n items from the list."""
+    first: Int
+
+    """Returns the items in the list that come before the specified cursor."""
+    before: String
+
+    """Returns the last n items from the list."""
+    last: Int
+  ): FollowConnection
+  likeIndex(
+    """Returns the items in the list that come after the specified cursor."""
+    after: String
+
+    """Returns the first n items from the list."""
+    first: Int
+
+    """Returns the items in the list that come before the specified cursor."""
+    before: String
+
+    """Returns the last n items from the list."""
+    last: Int
+  ): LikeConnection
+  likeAudioIndex(
+    """Returns the items in the list that come after the specified cursor."""
+    after: String
+
+    """Returns the first n items from the list."""
+    first: Int
+
+    """Returns the items in the list that come before the specified cursor."""
+    before: String
+
+    """Returns the last n items from the list."""
+    last: Int
+  ): LikeAudioConnection
 }
 
 """An object with an ID"""
@@ -62,6 +88,20 @@ type CeramicAccount implements Node {
   Whether the Ceramic instance is currently authenticated with this account or not
   """
   isViewer: Boolean!
+  user: User
+  audioList(
+    """Returns the items in the list that come after the specified cursor."""
+    after: String
+
+    """Returns the first n items from the list."""
+    first: Int
+
+    """Returns the items in the list that come before the specified cursor."""
+    before: String
+
+    """Returns the last n items from the list."""
+    last: Int
+  ): AudioConnection
   followList(
     """Returns the items in the list that come after the specified cursor."""
     after: String
@@ -75,7 +115,7 @@ type CeramicAccount implements Node {
     """Returns the last n items from the list."""
     last: Int
   ): FollowConnection
-  audioList(
+  likeList(
     """Returns the items in the list that come after the specified cursor."""
     after: String
 
@@ -87,17 +127,39 @@ type CeramicAccount implements Node {
 
     """Returns the last n items from the list."""
     last: Int
-  ): audioConnection
-  user: User
+  ): LikeConnection
+  likeAudioList(
+    """Returns the items in the list that come after the specified cursor."""
+    after: String
+
+    """Returns the first n items from the list."""
+    first: Int
+
+    """Returns the items in the list that come before the specified cursor."""
+    before: String
+
+    """Returns the last n items from the list."""
+    last: Int
+  ): LikeAudioConnection
+}
+
+type User implements Node {
+  id: ID!
+  name: String!
+  creator: Boolean!
+  followers: Int
+
+  """Account controlling the document"""
+  did: CeramicAccount!
 }
 
 """A connection to a list of items."""
-type FollowConnection {
+type AudioConnection {
   """Information to aid in pagination."""
   pageInfo: PageInfo!
 
   """A list of edges."""
-  edges: [FollowEdge]
+  edges: [AudioEdge]
 }
 
 """Information about pagination in a connection."""
@@ -116,6 +178,76 @@ type PageInfo {
 }
 
 """An edge in a connection."""
+type AudioEdge {
+  """The item at the end of the edge"""
+  node: Audio
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
+type Audio implements Node {
+  id: ID!
+  likes(
+    """Returns the items in the list that come after the specified cursor."""
+    after: String
+
+    """Returns the first n items from the list."""
+    first: Int
+
+    """Returns the items in the list that come before the specified cursor."""
+    before: String
+
+    """Returns the last n items from the list."""
+    last: Int
+
+    """Returns only documents created by the provided account"""
+    account: ID
+  ): LikeConnection!
+  title: String!
+  public: Boolean!
+  deleted: Boolean!
+  audioImage: String!
+  audioTrack: String!
+
+  """Account controlling the document"""
+  creator: CeramicAccount!
+}
+
+"""A connection to a list of items."""
+type LikeConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [LikeEdge]
+}
+
+"""An edge in a connection."""
+type LikeEdge {
+  """The item at the end of the edge"""
+  node: Like
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
+type Like implements Node {
+  id: ID!
+  liker: CeramicAccount!
+  status: Boolean!
+}
+
+"""A connection to a list of items."""
+type FollowConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [FollowEdge]
+}
+
+"""An edge in a connection."""
 type FollowEdge {
   """The item at the end of the edge"""
   node: Follow
@@ -126,6 +258,7 @@ type FollowEdge {
 
 type Follow implements Node {
   id: ID!
+  status: Boolean!
   following: CeramicAccount!
 
   """Account controlling the document"""
@@ -133,44 +266,33 @@ type Follow implements Node {
 }
 
 """A connection to a list of items."""
-type audioConnection {
+type LikeAudioConnection {
   """Information to aid in pagination."""
   pageInfo: PageInfo!
 
   """A list of edges."""
-  edges: [audioEdge]
+  edges: [LikeAudioEdge]
 }
 
 """An edge in a connection."""
-type audioEdge {
+type LikeAudioEdge {
   """The item at the end of the edge"""
-  node: audio
+  node: LikeAudio
 
   """A cursor for use in pagination"""
   cursor: String!
 }
 
-type audio implements Node {
+type LikeAudio implements Node {
   id: ID!
-  likes: Int
-  title: String!
-  public: Boolean!
-  audioImage: String!
-  audioTrack: String!
-
-  """Account controlling the document"""
-  creator: CeramicAccount!
+  likeID: CeramicStreamID!
+  audioID: CeramicStreamID!
+  like: Like
+  audio: Audio
 }
 
-type User implements Node {
-  id: ID!
-  name: String!
-  creator: Boolean!
-  followers: Int
-
-  """Account controlling the document"""
-  did: CeramicAccount!
-}
+"""A Ceramic Stream ID"""
+scalar CeramicStreamID @specifiedBy(url: "https://github.com/ceramicnetwork/CIP/blob/main/CIPs/CIP-59/CIP-59.md#streamid")
 
 """A connection to a list of items."""
 type UserConnection {
@@ -191,130 +313,16 @@ type UserEdge {
 }
 
 type Mutation {
-  createFollow(input: CreateFollowInput!): CreateFollowPayload
-  updateFollow(input: UpdateFollowInput!): UpdateFollowPayload
-  createaudio(input: CreateaudioInput!): CreateaudioPayload
-  updateaudio(input: UpdateaudioInput!): UpdateaudioPayload
   createUser(input: CreateUserInput!): CreateUserPayload
   updateUser(input: UpdateUserInput!): UpdateUserPayload
-}
-
-type CreateFollowPayload {
-  """Fetches an object given its ID"""
-  node(
-    """The ID of an object"""
-    id: ID!
-  ): Node
-
-  """Account currently authenticated on the Ceramic instance, if set"""
-  viewer: CeramicAccount
-  document: Follow!
-  clientMutationId: String
-}
-
-input CreateFollowInput {
-  content: FollowInput!
-  clientMutationId: String
-}
-
-input FollowInput {
-  following: DID!
-}
-
-"""
-A field whose value conforms to the standard DID format as specified in did-core: https://www.w3.org/TR/did-core/.
-"""
-scalar DID @specifiedBy(url: "https://www.w3.org/TR/did-core/")
-
-type UpdateFollowPayload {
-  """Fetches an object given its ID"""
-  node(
-    """The ID of an object"""
-    id: ID!
-  ): Node
-
-  """Account currently authenticated on the Ceramic instance, if set"""
-  viewer: CeramicAccount
-  document: Follow!
-  clientMutationId: String
-}
-
-input UpdateFollowInput {
-  id: ID!
-  content: PartialFollowInput!
-  options: UpdateOptionsInput
-  clientMutationId: String
-}
-
-input PartialFollowInput {
-  following: DID
-}
-
-input UpdateOptionsInput {
-  """
-  Fully replace the document contents instead of performing a shallow merge
-  """
-  replace: Boolean = false
-
-  """Only perform mutation if the document matches the provided version"""
-  version: CeramicCommitID
-}
-
-"""A Ceramic Commit ID"""
-scalar CeramicCommitID @specifiedBy(url: "https://github.com/ceramicnetwork/CIP/blob/main/CIPs/CIP-59/CIP-59.md#commitid")
-
-type CreateaudioPayload {
-  """Fetches an object given its ID"""
-  node(
-    """The ID of an object"""
-    id: ID!
-  ): Node
-
-  """Account currently authenticated on the Ceramic instance, if set"""
-  viewer: CeramicAccount
-  document: audio!
-  clientMutationId: String
-}
-
-input CreateaudioInput {
-  content: audioInput!
-  clientMutationId: String
-}
-
-input audioInput {
-  likes: Int
-  title: String!
-  public: Boolean!
-  audioImage: String!
-  audioTrack: String!
-}
-
-type UpdateaudioPayload {
-  """Fetches an object given its ID"""
-  node(
-    """The ID of an object"""
-    id: ID!
-  ): Node
-
-  """Account currently authenticated on the Ceramic instance, if set"""
-  viewer: CeramicAccount
-  document: audio!
-  clientMutationId: String
-}
-
-input UpdateaudioInput {
-  id: ID!
-  content: PartialaudioInput!
-  options: UpdateOptionsInput
-  clientMutationId: String
-}
-
-input PartialaudioInput {
-  likes: Int
-  title: String
-  public: Boolean
-  audioImage: String
-  audioTrack: String
+  createAudio(input: CreateAudioInput!): CreateAudioPayload
+  updateAudio(input: UpdateAudioInput!): UpdateAudioPayload
+  createFollow(input: CreateFollowInput!): CreateFollowPayload
+  updateFollow(input: UpdateFollowInput!): UpdateFollowPayload
+  createLike(input: CreateLikeInput!): CreateLikePayload
+  updateLike(input: UpdateLikeInput!): UpdateLikePayload
+  createLikeAudio(input: CreateLikeAudioInput!): CreateLikeAudioPayload
+  updateLikeAudio(input: UpdateLikeAudioInput!): UpdateLikeAudioPayload
 }
 
 type CreateUserPayload {
@@ -365,4 +373,220 @@ input PartialUserInput {
   name: String
   creator: Boolean
   followers: Int
+}
+
+input UpdateOptionsInput {
+  """
+  Fully replace the document contents instead of performing a shallow merge
+  """
+  replace: Boolean = false
+
+  """Only perform mutation if the document matches the provided version"""
+  version: CeramicCommitID
+}
+
+"""A Ceramic Commit ID"""
+scalar CeramicCommitID @specifiedBy(url: "https://github.com/ceramicnetwork/CIP/blob/main/CIPs/CIP-59/CIP-59.md#commitid")
+
+type CreateAudioPayload {
+  """Fetches an object given its ID"""
+  node(
+    """The ID of an object"""
+    id: ID!
+  ): Node
+
+  """Account currently authenticated on the Ceramic instance, if set"""
+  viewer: CeramicAccount
+  document: Audio!
+  clientMutationId: String
+}
+
+input CreateAudioInput {
+  content: AudioInput!
+  clientMutationId: String
+}
+
+input AudioInput {
+  title: String!
+  public: Boolean!
+  deleted: Boolean!
+  audioImage: String!
+  audioTrack: String!
+}
+
+type UpdateAudioPayload {
+  """Fetches an object given its ID"""
+  node(
+    """The ID of an object"""
+    id: ID!
+  ): Node
+
+  """Account currently authenticated on the Ceramic instance, if set"""
+  viewer: CeramicAccount
+  document: Audio!
+  clientMutationId: String
+}
+
+input UpdateAudioInput {
+  id: ID!
+  content: PartialAudioInput!
+  options: UpdateOptionsInput
+  clientMutationId: String
+}
+
+input PartialAudioInput {
+  title: String
+  public: Boolean
+  deleted: Boolean
+  audioImage: String
+  audioTrack: String
+}
+
+type CreateFollowPayload {
+  """Fetches an object given its ID"""
+  node(
+    """The ID of an object"""
+    id: ID!
+  ): Node
+
+  """Account currently authenticated on the Ceramic instance, if set"""
+  viewer: CeramicAccount
+  document: Follow!
+  clientMutationId: String
+}
+
+input CreateFollowInput {
+  content: FollowInput!
+  clientMutationId: String
+}
+
+input FollowInput {
+  status: Boolean!
+  following: DID!
+}
+
+"""
+A field whose value conforms to the standard DID format as specified in did-core: https://www.w3.org/TR/did-core/.
+"""
+scalar DID @specifiedBy(url: "https://www.w3.org/TR/did-core/")
+
+type UpdateFollowPayload {
+  """Fetches an object given its ID"""
+  node(
+    """The ID of an object"""
+    id: ID!
+  ): Node
+
+  """Account currently authenticated on the Ceramic instance, if set"""
+  viewer: CeramicAccount
+  document: Follow!
+  clientMutationId: String
+}
+
+input UpdateFollowInput {
+  id: ID!
+  content: PartialFollowInput!
+  options: UpdateOptionsInput
+  clientMutationId: String
+}
+
+input PartialFollowInput {
+  status: Boolean
+  following: DID
+}
+
+type CreateLikePayload {
+  """Fetches an object given its ID"""
+  node(
+    """The ID of an object"""
+    id: ID!
+  ): Node
+
+  """Account currently authenticated on the Ceramic instance, if set"""
+  viewer: CeramicAccount
+  document: Like!
+  clientMutationId: String
+}
+
+input CreateLikeInput {
+  content: LikeInput!
+  clientMutationId: String
+}
+
+input LikeInput {
+  liker: DID!
+  status: Boolean!
+}
+
+type UpdateLikePayload {
+  """Fetches an object given its ID"""
+  node(
+    """The ID of an object"""
+    id: ID!
+  ): Node
+
+  """Account currently authenticated on the Ceramic instance, if set"""
+  viewer: CeramicAccount
+  document: Like!
+  clientMutationId: String
+}
+
+input UpdateLikeInput {
+  id: ID!
+  content: PartialLikeInput!
+  options: UpdateOptionsInput
+  clientMutationId: String
+}
+
+input PartialLikeInput {
+  liker: DID
+  status: Boolean
+}
+
+type CreateLikeAudioPayload {
+  """Fetches an object given its ID"""
+  node(
+    """The ID of an object"""
+    id: ID!
+  ): Node
+
+  """Account currently authenticated on the Ceramic instance, if set"""
+  viewer: CeramicAccount
+  document: LikeAudio!
+  clientMutationId: String
+}
+
+input CreateLikeAudioInput {
+  content: LikeAudioInput!
+  clientMutationId: String
+}
+
+input LikeAudioInput {
+  likeID: CeramicStreamID!
+  audioID: CeramicStreamID!
+}
+
+type UpdateLikeAudioPayload {
+  """Fetches an object given its ID"""
+  node(
+    """The ID of an object"""
+    id: ID!
+  ): Node
+
+  """Account currently authenticated on the Ceramic instance, if set"""
+  viewer: CeramicAccount
+  document: LikeAudio!
+  clientMutationId: String
+}
+
+input UpdateLikeAudioInput {
+  id: ID!
+  content: PartialLikeAudioInput!
+  options: UpdateOptionsInput
+  clientMutationId: String
+}
+
+input PartialLikeAudioInput {
+  likeID: CeramicStreamID
+  audioID: CeramicStreamID
 }

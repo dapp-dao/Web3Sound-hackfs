@@ -1,0 +1,7 @@
+type User @createModel(accountRelation: SINGLE, description: "User Profile")
+{
+    did: DID! @documentAccount
+    name: String! @string(minLength: 2, maxLength: 50)
+    creator: Boolean!
+    followers: Int
+}
